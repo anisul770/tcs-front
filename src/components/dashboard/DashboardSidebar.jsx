@@ -1,5 +1,6 @@
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import useAuthContext from "../../hooks/useAuthContext";
+import { LayoutList, ShoppingCart } from "lucide-react";
 
 
 const DashboardSidebar = () => {
@@ -24,7 +25,7 @@ const DashboardSidebar = () => {
       {/* Brand Logo */}
       <div className="px-4 py-4 mb-6 hidden lg:block">
         <h2 className="text-2xl font-black italic text-primary tracking-tight">
-          TCS<span className="text-base-content font-light">.clean</span>
+          <Link to='/'>TCS<span className="text-base-content font-light">.clean</span></Link>
         </h2>
       </div>
 
@@ -35,6 +36,12 @@ const DashboardSidebar = () => {
         </NavLink>
         <NavLink to="/dashboard/profile" className={navClass} onClick={closeDrawer}>
           <span>⚙️</span> My Profile
+        </NavLink>
+        <NavLink to="/dashboard/cart" className={navClass} onClick={closeDrawer}>
+          <span><ShoppingCart size={20} strokeWidth={2.5} /></span> Cart
+        </NavLink>
+        <NavLink to="/shop" className={navClass} onClick={closeDrawer}>
+          <span><LayoutList size={20} strokeWidth={2.5} /></span> Services  
         </NavLink>
 
         {/* Client Links */}
@@ -54,7 +61,7 @@ const DashboardSidebar = () => {
         {isStaff && (
           <>
             <div className="divider text-xs text-primary font-bold uppercase my-6 px-4">Admin Controls</div>
-            <NavLink to="/dashboard/manage-bookings" className={navClass} onClick={closeDrawer}>
+            <NavLink to="/dashboard/bookings" className={navClass} onClick={closeDrawer}>
               <span>📋</span> All Bookings
             </NavLink>
             <NavLink to="/dashboard/manage-services" className={navClass} onClick={closeDrawer}>

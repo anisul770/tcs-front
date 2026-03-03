@@ -5,7 +5,7 @@ import authApiClient from "../services/auth-api-client";
 const useAuth = () => {
   const [user, setUser] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
-  
+
   const getToken = () => {
     const token = localStorage.getItem("authTokens");
     return token ? JSON.parse(token) : null;
@@ -14,8 +14,8 @@ const useAuth = () => {
 
   const [authTokens, setAuthTokens] = useState(getToken());
 
-  const fetchUserProfile = async () => {
-    setLoading(true);
+  const fetchUserProfile = async (isSilent = false) => {
+    if (!isSilent) setLoading(true);
     try {
       const res = await authApiClient.get(`/auth/users/me/`);
       setUser(res.data);
@@ -29,11 +29,11 @@ const useAuth = () => {
   };
 
   useEffect(() => {
-    if(authTokens) fetchUserProfile();
+    if (authTokens) fetchUserProfile();
   }, [authTokens]);
-  
 
-  const loginUser = async(userData) => {
+
+  const loginUser = async (userData) => {
     setLoading(true);
     try {
       const res = await apiClient.post(`/auth/jwt/create/`, userData);
@@ -56,7 +56,43 @@ const useAuth = () => {
     window.location.href = '/login';
   };
 
-  return { user, loginUser, errorMsg, loading, logout };
+  const handleAPIError = (
+    error,
+    defaultMessage = "Something Went Wrong! Try Again"
+  ) => {
+    if (error.response && error.response.data) {
+      const errorMessage = Object.values(error.response.data).flat().join("\n");
+      setErrorMsg(errorMessage);
+      return { success: false, message: errorMessage };
+    }
+    setErrorMsg(defaultMessage);
+    return { success: false, message: defaultMessage };
+  }
+
+  const updateProfile = async (data) => {
+    setErrorMsg("");
+    try {
+      await authApiClient.patch('auth/users/me/', data);
+      await fetchUserProfile(true);
+      return { success: true, message: "Profile Data Updated.\n" }
+    } catch (error) {
+      return handleAPIError(error);
+    }
+  }
+
+
+  const registerUser = async (userData) => {
+    setErrorMsg("");
+    try {
+      await apiClient.post("/auth/users/", userData);
+      return { success: true, message: "Registration successful. Check your email to activate" }
+    } catch (error) {
+      return handleAPIError(error, "Registration Failed! Try Again");
+    }
+  };
+
+
+  return { user, loginUser, errorMsg, loading, logout, updateProfile ,registerUser};
 
 };
 
