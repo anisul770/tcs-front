@@ -5,7 +5,7 @@ import CartItems from "../components/Cart/CartItems";
 import CartSummary from "../components/Cart/CartSummary";
 
 const Cart = () => {
-  const { cart, createOrGetCart, updateItemQuantity } = useCartContext();
+  const { cart, createOrGetCart, updateItemQuantity,removeItem } = useCartContext();
   const [localCart, setLocalCart] = useState(cart);
 
   useEffect(() => {
@@ -46,12 +46,17 @@ const Cart = () => {
     try {
       // 4. API Call with the absolute new quantity
       await updateItemQuantity(newQ, id);
+      toast.success("quantity updated");
     } catch (error) {
       // 5. Rollback on failure
       setLocalCart(copyCart);
       toast.error(error.response?.data || 'Something Went Wrong');
     }
   };
+
+  // const removeCartItem =async(id) =>{
+
+  // }
 
   const subtotal = localCart?.items?.reduce((acc, item) => acc + (parseFloat(item.service.price) * item.quantity), 0) || 0;
 
@@ -63,8 +68,8 @@ const Cart = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <CartItems localCart={localCart} updateQuantity={updateQuantity}/>
-        <CartSummary subtotal={subtotal}/>
+        <CartItems localCart={localCart} updateQuantity={updateQuantity} removeItem={removeItem}/>
+        <CartSummary subtotal={subtotal} setLocalCart={setLocalCart}/>
       </div>
     </div>
   );

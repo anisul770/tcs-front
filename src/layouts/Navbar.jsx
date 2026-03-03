@@ -1,10 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import useAuthContext from "../hooks/useAuthContext";
+import useCartContext from "../hooks/useCartContext";
+import { ShoppingBag } from "lucide-react";
 
 const Navbar = () => {
   const [isSticky, setIsSticky] = useState(true);
-  const {user, logout} = useAuthContext();
+  const { user, logout } = useAuthContext();
+  const { cart, createOrGetCart } = useCartContext();
+
+  useEffect(() => {
+    createOrGetCart();
+  }, [createOrGetCart]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,11 +41,37 @@ const Navbar = () => {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1 font-medium">
           <li><Link to={"/"}>Home</Link></li>
-          <li><Link to={"/shop/"}>Services</Link></li>
+          <li><Link to={"/services/"}>Services</Link></li>
           <li><Link to={'/dashboard/'}>Dashboard</Link></li>
         </ul>
       </div>
       <div className="navbar-end">
+        <div className="dropdown dropdown-end mr-2">
+          <div tabIndex={0} role="button" className="btn btn-ghost btn-circle">
+            <div className="indicator">
+              {/* Modern Lucide Icon */}
+              <ShoppingBag size={20} className="text-base-content" />
+
+              {/* Cleaner, Minimalist Badge */}
+              {cart?.items?.length > 0 && (
+                <span className="indicator-item badge badge-primary badge-xs font-bold border-none h-4 min-w-[16px] p-0 text-[10px]">
+                  {cart.items.length}
+                </span>
+              )}
+            </div>
+          </div>
+          <div tabIndex={0} className="mt-3 z-[1] card card-compact dropdown-content w-52 bg-base-100 shadow border border-base-200">
+            <div className="card-body">
+              <span className="font-bold text-lg">{cart?.items?.length || 0} Items</span>
+              <span className="text-info font-bold uppercase text-[10px] tracking-widest">
+                Subtotal: €{cart?.total_price || "0.00"}
+              </span>
+              <div className="card-actions">
+                <Link to="/dashboard/cart" className="btn btn-primary btn-block btn-sm">View Cart</Link>
+              </div>
+            </div>
+          </div>
+        </div>
         {!user ? (
           <>
             <Link to="/login"><button className="btn btn-primary btn-outline btn-sm mr-2">Login</button></Link>

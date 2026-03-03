@@ -1,147 +1,140 @@
 import { Link } from "react-router";
 import useAuthContext from "../../hooks/useAuthContext";
+import useBookingContext from "../../hooks/useBookingContext"; // Added context
+import { LayoutDashboard, TrendingUp, Clock, CheckCircle, ArrowUpRight } from "lucide-react";
 
 const StaffMain = () => {
   const { user } = useAuthContext();
+  const { bookings, isLoading } = useBookingContext();
   
-  // Handling name fallback without username
+  // Real Data Logic
+  const pendingOrders = bookings.filter(b => b.status === "Pending" || b.status === "Not Paid");
+  const completedOrders = bookings.filter(b => b.status === "Delivered");
+  const totalRevenue = completedOrders.reduce((sum, b) => sum + parseFloat(b.total_price), 0);
+
   const staffDisplayName = user?.first_name 
     ? `${user.first_name} ${user.last_name}` 
     : user?.email?.split('@')[0];
 
+  if (isLoading) return (
+    <div className="h-96 flex items-center justify-center">
+      <span className="loading loading-spinner loading-lg text-primary"></span>
+    </div>
+  );
+
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-top-4 duration-700">
-      {/* 1. TOP PART (Keeping as requested) */}
+      {/* 1. Header with dynamic name */}
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black tracking-tight text-base-content">Staff Command Center</h1>
-          <p className="text-base-content/60 mt-1">Logged in as: <span className="font-bold text-primary">{staffDisplayName}</span></p>
+          <h1 className="text-4xl font-black tracking-tighter uppercase italic text-base-content">
+            Staff <span className="text-primary">Command</span>
+          </h1>
+          <p className="text-xs font-bold uppercase opacity-40 tracking-widest mt-1">
+            Welcome back, <span className="text-primary">{staffDisplayName}</span>
+          </p>
         </div>
         <div className="flex gap-2">
-          <button className="btn btn-sm btn-outline">Export Reports</button>
-          <button className="btn btn-sm btn-primary">Schedule Staff</button>
+          <Link to="/dashboard/admin/services" className="btn btn-sm btn-primary rounded-full px-6">
+            <LayoutDashboard size={14} /> Manage Services
+          </Link>
         </div>
       </header>
 
-      {/* 2. HIGH LEVEL METRICS (Keeping as requested) */}
-      <div className="stats stats-vertical lg:stats-horizontal shadow-sm bg-base-100 border border-base-300 w-full rounded-3xl">
-        <div className="stat">
-          <div className="stat-title font-bold">New Bookings</div>
-          <div className="stat-value text-primary">14</div>
-          <div className="stat-desc">Last 24 hours</div>
+      {/* 2. REAL METRICS - No more hardcoded numbers */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="bg-base-100 p-6 rounded-3xl border border-base-300 shadow-sm hover:border-primary/30 transition-colors">
+          <div className="flex justify-between items-start">
+            <div className="p-2 bg-primary/10 rounded-xl text-primary"><TrendingUp size={20}/></div>
+            <span className="text-[10px] font-black opacity-30 uppercase tracking-tighter">Live</span>
+          </div>
+          <p className="mt-4 text-3xl font-black italic">€{totalRevenue.toFixed(0)}</p>
+          <p className="text-[10px] font-bold uppercase opacity-50">Total Revenue</p>
         </div>
-        <div className="stat">
-          <div className="stat-title font-bold">Pending Approval</div>
-          <div className="stat-value text-warning">05</div>
-          <div className="stat-desc">Needs assignment</div>
+
+        <div className="bg-base-100 p-6 rounded-3xl border border-base-300 shadow-sm">
+          <div className="p-2 bg-warning/10 rounded-xl text-warning"><Clock size={20}/></div>
+          <p className="mt-4 text-3xl font-black italic">{pendingOrders.length}</p>
+          <p className="text-[10px] font-bold uppercase opacity-50">Pending Action</p>
         </div>
-        <div className="stat">
-          <div className="stat-title font-bold">Today's Revenue</div>
-          <div className="stat-value text-success">€1,240</div>
-          <div className="stat-desc">↗︎ 12% from yesterday</div>
+
+        <div className="bg-base-100 p-6 rounded-3xl border border-base-300 shadow-sm">
+          <div className="p-2 bg-success/10 rounded-xl text-success"><CheckCircle size={20}/></div>
+          <p className="mt-4 text-3xl font-black italic">{completedOrders.length}</p>
+          <p className="text-[10px] font-bold uppercase opacity-50">Jobs Delivered</p>
         </div>
-        <div className="stat">
-          <div className="stat-title font-bold">Active Cleaners</div>
-          <div className="stat-value">08</div>
-          <div className="stat-desc">On-site now</div>
+
+        <div className="bg-primary p-6 rounded-3xl shadow-xl shadow-primary/20 text-primary-content">
+          <div className="p-2 bg-white/20 rounded-xl w-fit"><ArrowUpRight size={20}/></div>
+          <p className="mt-4 text-3xl font-black italic">{bookings.length}</p>
+          <p className="text-[10px] font-bold uppercase opacity-80">Total Bookings</p>
         </div>
       </div>
 
-      {/* 3. NEW BOTTOM PART: Operational Overview */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* Left Side: Recent Bookings Table (Takes 2/3 space) */}
-        <div className="lg:col-span-2 card bg-base-100 border border-base-300 shadow-sm">
+        {/* Real Bookings Table */}
+        <div className="lg:col-span-2 card bg-base-100 border border-base-300 shadow-sm overflow-hidden rounded-3xl">
           <div className="p-6 border-b border-base-200 flex justify-between items-center">
-            <h3 className="font-black text-lg">Upcoming Appointments</h3>
-            <Link to="/dashboard/manage-bookings" className="link link-primary text-sm no-underline font-bold">View All</Link>
+            <h3 className="font-black text-lg italic uppercase tracking-tight">Recent Orders</h3>
+            <Link to="/dashboard/bookings" className="text-xs font-black uppercase text-primary hover:underline">View All History</Link>
           </div>
           <div className="overflow-x-auto">
-            <table className="table table-zebra w-full">
+            <table className="table w-full">
               <thead>
-                <tr className="text-base-content/50">
-                  <th>Customer</th>
+                <tr className="text-[10px] font-black uppercase tracking-widest opacity-40">
+                  <th className="pl-8">Customer</th>
                   <th>Service</th>
-                  <th>Date/Time</th>
                   <th>Status</th>
+                  <th className="text-right pr-8">Total</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <div className="font-bold text-sm">John Doe</div>
-                    <div className="text-[10px] opacity-50">john.d@example.com</div>
-                  </td>
-                  <td>Deep Home Clean</td>
-                  <td className="text-sm">Today, 14:30</td>
-                  <td><span className="badge badge-success badge-sm py-2 text-white font-bold">Assigned</span></td>
-                </tr>
-                <tr>
-                  <td>
-                    <div className="font-bold text-sm">Mila Kunis</div>
-                    <div className="text-[10px] opacity-50">m.kunis@holiday.com</div>
-                  </td>
-                  <td>End of Tenancy</td>
-                  <td className="text-sm">Tomorrow, 09:00</td>
-                  <td><span className="badge badge-warning badge-sm py-2 font-bold text-warning-content">Pending</span></td>
-                </tr>
-                <tr>
-                  <td>
-                    <div className="font-bold text-sm">Local Office Inc.</div>
-                    <div className="text-[10px] opacity-50">admin@office.ie</div>
-                  </td>
-                  <td>Office recurring</td>
-                  <td className="text-sm">Oct 15, 11:00</td>
-                  <td><span className="badge badge-ghost badge-sm py-2 font-bold">Scheduled</span></td>
-                </tr>
+              <tbody className="text-sm">
+                {bookings.slice(0, 5).map((order) => (
+                  <tr key={order.id} className="hover:bg-base-200/30 transition-colors">
+                    <td className="pl-8 py-4">
+                      <div className="font-bold">Order #{order.id.toString().slice(-4)}</div>
+                      <div className="text-[10px] opacity-50">Customer ID: {order.user}</div>
+                    </td>
+                    <td className="font-medium text-xs">
+                       {order.items[0]?.service?.name || "Service"} 
+                       {order.items.length > 1 && ` +${order.items.length - 1}`}
+                    </td>
+                    <td>
+                      <span className={`badge badge-sm font-black italic text-[9px] py-2 px-3 ${
+                        order.status === 'Delivered' ? 'badge-success' : 'badge-warning'
+                      }`}>
+                        {order.status}
+                      </span>
+                    </td>
+                    <td className="text-right pr-8 font-black">€{parseFloat(order.total_price).toFixed(2)}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         </div>
 
-        {/* Right Side: Activity Feed (Takes 1/3 space) */}
-        <div className="card bg-base-100 border border-base-300 shadow-sm p-6">
-          <h3 className="font-black text-lg mb-6">Recent Activity</h3>
-          <ul className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-base-300 before:to-transparent">
-            <li className="relative flex items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary z-10 shrink-0 border-4 border-base-100">
-                  ✨
-                </div>
-                <div>
-                  <p className="text-sm font-bold leading-none">New Booking</p>
-                  <p className="text-xs opacity-60 mt-1">Kitchen deep clean by Sarah W.</p>
-                </div>
-              </div>
-              <span className="text-[10px] opacity-40 font-bold whitespace-nowrap">2m ago</span>
-            </li>
-            <li className="relative flex items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary z-10 shrink-0 border-4 border-base-100">
-                  ⭐
-                </div>
-                <div>
-                  <p className="text-sm font-bold leading-none">New Review</p>
-                  <p className="text-xs opacity-60 mt-1">5-star from Mike Ross</p>
-                </div>
-              </div>
-              <span className="text-[10px] opacity-40 font-bold whitespace-nowrap">45m ago</span>
-            </li>
-            <li className="relative flex items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-full bg-info/10 flex items-center justify-center text-info z-10 shrink-0 border-4 border-base-100">
-                  💳
-                </div>
-                <div>
-                  <p className="text-sm font-bold leading-none">Payment Received</p>
-                  <p className="text-xs opacity-60 mt-1">Invoice #2041 Paid</p>
-                </div>
-              </div>
-              <span className="text-[10px] opacity-40 font-bold whitespace-nowrap">2h ago</span>
-            </li>
-          </ul>
+        {/* Right Side: Simple Admin Shortcuts */}
+        <div className="card bg-base-100 border border-base-300 shadow-sm p-6 rounded-3xl">
+          <h3 className="font-black text-lg mb-6 italic uppercase">Quick Actions</h3>
+          <div className="grid grid-cols-1 gap-3">
+             <Link to="/dashboard/admin/services" className="btn btn-outline btn-sm justify-start gap-3 lowercase font-medium">
+               <span className="text-primary font-black">01.</span> Manage All Services
+             </Link>
+             <button className="btn btn-outline btn-sm justify-start gap-3 lowercase font-medium opacity-50 cursor-not-allowed">
+               <span className="text-primary font-black">02.</span> Download Revenue PDF
+             </button>
+             <button className="btn btn-outline btn-sm justify-start gap-3 lowercase font-medium opacity-50 cursor-not-allowed">
+               <span className="text-primary font-black">03.</span> System Settings
+             </button>
+          </div>
+          <div className="mt-10 p-4 bg-primary/5 rounded-2xl border border-primary/10">
+            <p className="text-[10px] font-black uppercase text-primary mb-2">Pro Tip</p>
+            <p className="text-xs leading-relaxed opacity-70">
+              Only orders marked as <span className="font-bold">"Delivered"</span> contribute to your total revenue metrics.
+            </p>
+          </div>
         </div>
-
       </div>
     </div>
   );

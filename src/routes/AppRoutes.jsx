@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router';
 import MainLayout from '../layouts/MainLayout';
 import Home from '../pages/Home';
-import Shop from '../pages/Shop';
+import Service from '../pages/Service';
 import ServiceDetail from '../pages/ServiceDetail';
 import LoginPage from '../pages/LoginPage';
 import Dashboard from '../pages/Dashboard';
@@ -13,6 +13,8 @@ import BookingsList from '../pages/BookingsList';
 import Cart from '../pages/Cart';
 import RegisterPage from '../pages/RegisterPage';
 import ActivateAccount from '../components/Registration/ActivateAccount'
+import BookingDetails from '../components/Bookings/BookingDetails';
+import AdminServiceManager from '../components/dashboard/AdminService';
 
 const AppRoutes = () => {
   return (
@@ -21,8 +23,8 @@ const AppRoutes = () => {
       <Routes>
         <Route element={<MainLayout />}>
           <Route index element={<Home />} />
-          <Route path='shop' element={<Shop />} />
-          <Route path='shop/:serviceId' element={<ServiceDetail />} />
+          <Route path='services' element={<Service />} />
+          <Route path='services/:serviceId' element={<ServiceDetail />} />
           <Route path='login' element={<LoginPage />} />
           <Route path='register' element={<RegisterPage />} />
           <Route path='activate/:uid/:token' element={<ActivateAccount />} />
@@ -33,7 +35,9 @@ const AppRoutes = () => {
           <Route index element={<Dashboard />} />
           <Route path='profile' element={<ProfileSettings />} />
           <Route path='bookings' element={<BookingsList />} />
+          <Route path='bookings/:id' element={<BookingDetails />} />
           <Route path='cart' element={<Cart />} />
+          <Route path='admin/services' element={<AdminServiceManager />} />
         </Route>
       </Routes>
     </>

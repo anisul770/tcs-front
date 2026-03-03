@@ -1,7 +1,8 @@
 import { Link, useParams } from "react-router";
 import ServiceInfo from "./ServiceInfo";
 import ServicePricingCard from "./ServicePricingCard";
-import { Suspense, useEffect, useState } from "react";
+import ServiceReviews from "./ServiceReviews"; // <-- IMPORT ADDED HERE
+import { useEffect, useState } from "react";
 import apiClient from "../../services/api-client";
 import ErrorAlert from "../ErrorAlert";
 
@@ -10,19 +11,19 @@ const Service = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const { serviceId } = useParams();
-  
+
   // MOCK DATA (We will swap this for an API call later)
-  
+
   useEffect(() => {
-    const getInfo = async() => {
+    const getInfo = async () => {
       setLoading(true);
-      try{
+      try {
         const res = await apiClient.get(`/services/${serviceId}`);
         console.log(res.data);
         setService(res.data)
-      }catch(error){
+      } catch (error) {
         setError(error.response);
-      }finally{setLoading(false);}
+      } finally { setLoading(false); }
     }
     getInfo();
   }, [serviceId]);
@@ -41,7 +42,7 @@ const Service = () => {
       "Deep scrubbing of bathrooms",
       "Vacuuming and mopping of all floors",
       "100% Eco-friendly, pet-safe products used"
-    ] 
+    ]
   };
 
   if (loading) {
@@ -58,34 +59,35 @@ const Service = () => {
     <div className="min-h-screen bg-base-100 pt-24 pb-20">
       <div className="container mx-auto px-4 max-w-6xl">
         {error && <ErrorAlert error={error} />}
-          {/* Breadcrumbs */}
+        {/* Breadcrumbs */}
         <div className="text-sm breadcrumbs text-gray-500 mb-6">
           <ul>
             <li><Link to="/">Home</Link></li>
-            <li><Link to="/shop">Services</Link></li>
+            <li><Link to="/services">Services</Link></li>
             <li><span className="text-primary font-medium">{service.name}</span></li>
           </ul>
         </div>
 
         {/* Modular Grid Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-          
+
           {/* LEFT COLUMN: Data-driven Info */}
           <div className="lg:col-span-2">
             <ServiceInfo demoService={demoService} service={service} />
-            
-            {/* You can drop the Reviews component right here later! */}
+
+            {/* THE REVIEWS COMPONENT */}
             <div className="pt-12">
-               <h3 className="text-2xl font-bold mb-6 italic">Client Reviews</h3>
-               <div className="p-10 border-2 border-dashed border-base-300 rounded-3xl text-center text-gray-400">
-                 [ Review Component Goes Here ]
-               </div>
+              <h3 className="text-2xl font-bold mb-6 italic uppercase tracking-tighter text-base-content">
+                Client <span className="text-primary">Reviews</span>
+              </h3>
+              {/* Replaced your placeholder with the real component */}
+              <ServiceReviews serviceId={serviceId} />
             </div>
           </div>
 
           {/* RIGHT COLUMN: Checkout Card */}
           <div className="lg:col-span-1">
-            <ServicePricingCard price={service.price} />
+            <ServicePricingCard price={service.price} service={service} />
           </div>
 
         </div>

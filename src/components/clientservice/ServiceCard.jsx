@@ -1,17 +1,19 @@
 import { Link } from "react-router";
+import AddToCartButton from "./AddToCartButton";
 
 const ServiceCard = ({ service }) => {
   return (
-    <Link to={`/shop/${service.id}`}>
-      <div className="flex bg-base-100 rounded-2xl overflow-hidden shadow-sm border border-base-300 hover:shadow-lg transition-shadow">
-        {/* Price Section */}
-        <div className="bg-primary text-primary-content w-28 flex flex-col items-center justify-center font-bold">
-          <span className="text-[10px] uppercase opacity-70">Price</span>
-          <span className="text-xl">${service.price}</span>
-        </div>
 
-        {/* Info Section */}
-        <div className="p-5 flex-grow">
+    <div className="flex bg-base-100 rounded-2xl overflow-hidden shadow-sm border border-base-300 hover:shadow-lg transition-shadow">
+      {/* Price Section */}
+      <div className="bg-primary text-primary-content w-28 flex flex-col items-center justify-center font-bold">
+        <span className="text-[10px] uppercase opacity-70">Price</span>
+        <span className="text-xl">${service.price}</span>
+      </div>
+
+      {/* Info Section */}
+      <div className="p-5 flex-grow">
+        <Link to={`/services/${service.id}`}>
           <div className="flex justify-between items-start">
             <div>
               <h4 className="font-bold text-lg leading-tight">{service.name}</h4>
@@ -29,13 +31,13 @@ const ServiceCard = ({ service }) => {
               </svg>
             </div>
           </div>
-
-          <div className="card-actions justify-end mt-4">
-            <button className="btn btn-primary btn-sm rounded-lg">Add to Cart</button>
-          </div>
+        </Link>
+        <div className="card-actions justify-end mt-4">
+          <AddToCartButton serviceId={service.id} />
         </div>
       </div>
-    </Link>
+    </div>
+
   );
 };
 

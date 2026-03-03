@@ -40,7 +40,7 @@ const DashboardSidebar = () => {
         <NavLink to="/dashboard/cart" className={navClass} onClick={closeDrawer}>
           <span><ShoppingCart size={20} strokeWidth={2.5} /></span> Cart
         </NavLink>
-        <NavLink to="/shop" className={navClass} onClick={closeDrawer}>
+        <NavLink to="/services" className={navClass} onClick={closeDrawer}>
           <span><LayoutList size={20} strokeWidth={2.5} /></span> Services  
         </NavLink>
 
