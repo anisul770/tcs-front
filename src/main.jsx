@@ -8,15 +8,15 @@ import { CartProvider } from './context/CartContext.jsx';
 import { BookingProvider } from './context/BookingContext.jsx';
 
 createRoot(document.getElementById('root')).render(
-  // <StrictMode>
-  <AuthProvider>
-    <CartProvider>
-      <BookingProvider>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-      </BookingProvider>
-    </CartProvider>
-  </AuthProvider>
-  // </StrictMode>
+  <StrictMode>
+    <AuthProvider>
+      <CartProvider>
+        <BookingProvider>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </BookingProvider>
+      </CartProvider>
+    </AuthProvider>
+  </StrictMode>
 )

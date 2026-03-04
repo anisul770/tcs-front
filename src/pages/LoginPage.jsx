@@ -2,6 +2,7 @@
 import { Link, useNavigate } from 'react-router';
 import useAuthContext from '../hooks/useAuthContext';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -18,6 +19,8 @@ const LoginPage = () => {
     const result = await loginUser(data);
     if (result.success) {
       navigate('/dashboard');
+    }else{
+      toast.error(errorMsg || "Backend server is offline. Please check your connection.");
     }
   };
 

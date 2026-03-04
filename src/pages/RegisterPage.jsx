@@ -62,7 +62,7 @@ const Register = () => {
 
   // --- FORM STATE (Original Design) ---
   return (
-    <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-base-200 flex items-center justify-center p-4 mt-16">
       <div className="card w-full max-w-md bg-base-100 shadow-xl border border-base-300">
         <div className="card-body p-8">
           <div className="text-center mb-8">
@@ -101,7 +101,7 @@ const Register = () => {
                   required: "Email is required",
                   pattern: { value: /^\S+@\S+$/i, message: "Invalid email" }
                 })}
-                className={`input input-bordered focus:input-primary ${errors.email ? 'input-error' : ''}`}
+                className={`input input-bordered w-full focus:input-primary ${errors.email ? 'input-error' : ''}`}
               />
               {errors.email && <span className="text-[10px] text-error mt-1">{errors.email.message}</span>}
             </div>

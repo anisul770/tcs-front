@@ -29,7 +29,7 @@ const useBooking = () => {
       setCurrentOrder(res.data);
       return res.data;
     } catch (error) {
-      toast.error( error.response?.data || "Could not load order details");
+      toast.error(error.response?.data || "Could not load order details");
     } finally {
       setIsLoading(false);
     }
@@ -41,40 +41,66 @@ const useBooking = () => {
     try {
       await authApiClient.patch(`/orders/${id}/update_status/`, { status: newStatus });
       toast.success(`Status updated to ${newStatus}`);
-      await fetchOrderDetails(id); // Refresh specific order
+      const data = await fetchOrderDetails(id); // Refresh specific order
       await fetchBookings(); // Refresh list in background
+      return { success: true, data: data };
     } catch (error) {
-      toast.error(error.response?.data?.detail || "Update failed");
+      return { success: false, msg: error.response?.data?.detail || "Update failed" };
     } finally {
       setActionLoading(false);
     }
   };
 
   // 4. Cancel Order (User/Admin)
-  const handleCancel = async (id) => {
+  const cancelBooking = async (id) => {
     if (!window.confirm("Confirm cancellation?")) return;
     setActionLoading(true);
     try {
       await authApiClient.post(`/orders/${id}/cancel/`, {});
       toast.success("Order cancelled");
-      await fetchOrderDetails(id);
+      const res = await fetchOrderDetails(id);
       await fetchBookings();
+      return { success: true, data: res };
     } catch (error) {
-      toast.error(error.response?.data?.detail || "Cancellation failed");
+      return { success: false, msg: error.response?.data?.detail || "Cancellation failed" };
     } finally {
       setActionLoading(false);
     }
   };
 
-  return { bookings,
-      currentOrder,
-      isLoading,
-      actionLoading,
-      fetchBookings,
-      fetchOrderDetails,
-      updateOrderStatus,
-      handleCancel,
-      setCurrentOrder};
+  const bookingPayment = async (order) => {
+    setActionLoading(true);
+    try {
+      const res = await authApiClient.post('/payment/initiate/', {
+        amount: order.total_price,
+        orderId: order.id,
+        numItems: order.items?.length,
+      });
+      if (res.data.payment_url) {
+        setActionLoading(false);
+        window.location.href = res.data.payment_url;
+        return {success:true};
+      } else return {success:false , msg: 'Payment Failed' };
+    } catch (error) {
+      console.log(error.response)
+      return {success:false, msg: error?.response?.data.error};
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  return {
+    bookings,
+    currentOrder,
+    isLoading,
+    actionLoading,
+    fetchBookings,
+    fetchOrderDetails,
+    updateOrderStatus,
+    cancelBooking,
+    setCurrentOrder,
+    bookingPayment,
+  };
 };
 
 export default useBooking;

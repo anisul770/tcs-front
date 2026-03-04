@@ -64,7 +64,7 @@ const DashboardSidebar = () => {
             <NavLink to="/dashboard/bookings" className={navClass} onClick={closeDrawer}>
               <span>📋</span> All Bookings
             </NavLink>
-            <NavLink to="/dashboard/manage-services" className={navClass} onClick={closeDrawer}>
+            <NavLink to="/dashboard/admin/services" className={navClass} onClick={closeDrawer}>
               <span>🛠️</span> Manage Services
             </NavLink>
             <NavLink to="/dashboard/customers" className={navClass} onClick={closeDrawer}>

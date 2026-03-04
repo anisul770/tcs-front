@@ -42,7 +42,8 @@ const useAuth = () => {
       await fetchUserProfile();
       return { success: true };
     } catch (error) {
-      setErrorMsg(error.response);
+      console.log(error);
+      setErrorMsg(error?.response?.data);
       return { success: false };
     } finally {
       setLoading(false);
@@ -51,6 +52,7 @@ const useAuth = () => {
 
   const logout = () => {
     localStorage.removeItem("authTokens");
+    localStorage.removeItem("cartId");
     setAuthTokens(null);
     setUser(null);
     window.location.href = '/login';

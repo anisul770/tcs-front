@@ -6,7 +6,6 @@ import {
   Printer,
   Hash,
 } from "lucide-react";
-import authApiClient from "../../services/auth-api-client";
 import toast from "react-hot-toast";
 import useAuthContext from "../../hooks/useAuthContext"; // Ensure path is correct
 import BookingDetailsLeft from "./BookingDetailsLeft";
@@ -15,47 +14,55 @@ import useBookingContext from "../../hooks/useBookingContext";
 
 const BookingDetails = () => {
   const { id } = useParams();
-  const { fetchOrderDetails } = useBookingContext();
   const location = useLocation();
+  // Destructure currentOrder from the context
+  const {
+    fetchOrderDetails,
+    currentOrder,
+    actionLoading,
+    updateOrderStatus,
+    cancelBooking,
+    bookingPayment
+  } = useBookingContext();
   const { user } = useAuthContext();
-  const [actionLoading, setActionLoading] = useState(false);
-
+  // 1. Point the order variable to currentOrder from the hook
   const [order, setOrder] = useState(location.state?.orderData || null);
   const [loading, setLoading] = useState(!order);
 
+
   useEffect(() => {
-    fetchOrderDetails(id);
-    setLoading(false);
-  }, [id, fetchOrderDetails]);
+    if (currentOrder && currentOrder.id === id) {
+      setOrder(currentOrder);
+      setLoading(false);
+    }
+  }, [currentOrder, id]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      // If we don't have order in state, ensure loader is visible
+      if (!order) setLoading(true);
+      await fetchOrderDetails(id);
+      // Loading stops once the sync useEffect above triggers
+    };
+    loadData();
+  }, [id, fetchOrderDetails, order]);
 
   const handleCancel = async () => {
     if (!window.confirm("Are you sure you want to cancel this booking?")) return;
-
-    setActionLoading(true);
-    try {
-      await authApiClient.post(`/orders/${id}/cancel/`, {});
-      toast.success("Order cancelled successfully");
-      const res = await authApiClient.get(`/orders/${id}/`);
-      setOrder(res.data);
-    } catch (error) {
-      toast.error(error.response?.data?.detail || "Failed to cancel order");
-    } finally {
-      setActionLoading(false);
-    }
+    const res = await cancelBooking(id);
+    if (res.success) setOrder(res.data);
+    else toast.error(res.msg);
   };
 
   const handleStatusChange = async (newStatus) => {
-    setActionLoading(true);
-    try {
-      await authApiClient.patch(`/orders/${id}/update_status/`, { status: newStatus });
-      toast.success(`Status updated to ${newStatus}`);
-      const res = await authApiClient.get(`/orders/${id}/`);
-      setOrder(res.data);
-    } catch (error) {
-      toast.error(error.response?.data?.detail || "Failed to update status");
-    } finally {
-      setActionLoading(false);
-    }
+    const res = await updateOrderStatus(id, newStatus);
+    if (res.success) setOrder(res.data);
+    else toast.error(res.msg);
+  };
+
+  const handlePayment = async () => {
+    const res = await bookingPayment(order);
+    if(!res.success) toast.error(res.msg || "Something went Wrong");
   };
 
   if (loading) return (
@@ -91,8 +98,8 @@ const BookingDetails = () => {
           <button className="btn btn-outline btn-sm gap-2 flex-1 md:flex-none">
             <Printer size={16} /> Print
           </button>
-          {order.status === "Not Paid" && !isCancelled && (
-            <button className="btn btn-primary btn-sm gap-2 flex-1 md:flex-none shadow-lg shadow-primary/20">
+          {order.status === "Not Paid" && !isCancelled && !user.is_staff && (
+            <button disabled={actionLoading} onClick={handlePayment} className="btn btn-primary btn-sm gap-2 flex-1 md:flex-none shadow-lg shadow-primary/20">
               <CreditCard size={16} /> Pay Now
             </button>
           )}
