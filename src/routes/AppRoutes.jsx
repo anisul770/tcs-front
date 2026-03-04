@@ -27,7 +27,7 @@ const AppRoutes = () => {
           <Route path='services/:serviceId' element={<ServiceDetail />} />
           <Route path='login' element={<LoginPage />} />
           <Route path='register' element={<RegisterPage />} />
-          <Route path='activate/:uid/:token' element={<ActivateAccount />} />
+          <Route path='activate/:uid/:token/' element={<ActivateAccount />} />
         </Route>
         <Route path='dashboard' element={<PrivateRoute >
           <DashboardLayout />
