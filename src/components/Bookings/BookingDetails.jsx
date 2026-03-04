@@ -45,7 +45,7 @@ const BookingDetails = () => {
       // Loading stops once the sync useEffect above triggers
     };
     loadData();
-  }, [id, fetchOrderDetails, order]);
+  }, [id, fetchOrderDetails]);
 
   const handleCancel = async () => {
     if (!window.confirm("Are you sure you want to cancel this booking?")) return;

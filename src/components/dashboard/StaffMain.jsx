@@ -55,6 +55,22 @@ const StaffMain = () => {
     revenueChange = 100; // 100% growth if there was no revenue last month
   }
 
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case "Ready To Go":
+      case "Delivered":
+        return <span className="badge badge-success badge-sm font-bold uppercase text-[10px] py-3 px-4 italic">Delivered</span>;
+      case "Not Paid":
+        return <span className="badge badge-error badge-sm font-bold uppercase text-[10px] py-3 px-4 italic">Not Paid</span>;
+      case "Pending":
+        return <span className="badge badge-warning badge-sm font-bold uppercase text-[10px] py-3 px-4 italic">Pending</span>;
+      case "Canceled":
+        return <span className="badge badge-ghost badge-sm font-bold uppercase text-[10px] py-3 px-4 italic opacity-50">Canceled</span>;
+      default:
+        return <span className="badge badge-ghost badge-sm font-bold uppercase text-[10px] py-3 px-4 italic">{status}</span>;
+    }
+  };
+
   const staffDisplayName = user?.first_name
     ? `${user.first_name} ${user.last_name}`
     : user?.email?.split('@')[0];
@@ -157,7 +173,7 @@ const StaffMain = () => {
                     <tr className="bg-base-200/30 text-[10px] font-black uppercase tracking-widest border-none">
                       <th className="pl-8 py-5">Order Reference</th>
                       <th>Primary Service</th>
-                      <th>Status</th>
+                      <th className="pl-8">Status</th>
                       <th className="text-right pr-8">Net Total</th>
                     </tr>
                   </thead>
@@ -175,10 +191,7 @@ const StaffMain = () => {
                           {order.items.length > 1 && <span className="ml-2 text-[10px] font-black opacity-30">+{order.items.length - 1} More</span>}
                         </td>
                         <td>
-                          <div className={`badge badge-sm rounded-md font-black italic text-[9px] py-3 px-3 border-none ${order.status === 'Delivered' ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning'
-                            }`}>
-                            {order.status}
-                          </div>
+                          {getStatusBadge(order.status)}
                         </td>
                         <td className="text-right pr-8">
                           <p className="font-black italic text-lg tracking-tighter">€{(parseFloat(order.total_price) || 0).toFixed(2)}</p>

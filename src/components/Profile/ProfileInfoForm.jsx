@@ -1,4 +1,3 @@
-import React from 'react';
 
 const ProfileInfoForm = ({ register, isEditing, errors }) => {
   return (
@@ -45,7 +44,7 @@ const ProfileInfoForm = ({ register, isEditing, errors }) => {
           className="input input-bordered w-full bg-base-200 cursor-not-allowed opacity-70 font-medium"
         />
         <label className="label">
-          <span className="label-text-alt text-primary italic font-medium text-[10px]">Email verification is required to change address.</span>
+          <span className="label-text-alt text-primary italic font-medium text-[10px]">Contact support to change email address.</span>
         </label>
       </div>
 
