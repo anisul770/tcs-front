@@ -31,9 +31,9 @@ const Navbar = () => {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /> </svg>
           </label>
           <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-            <li><a>Home</a></li>
-            <li><a>Services</a></li>
-            <li><a>About</a></li>
+            <li><Link to={"/"}>Home</Link></li>
+            <li><Link to={"/services/"}>Services</Link></li>
+            <li><Link to={'/dashboard/'}>Dashboard</Link></li>
           </ul>
         </div>
         <Link to={'/'} className="text-2xl font-bold text-primary italic">TCS</Link>
@@ -91,8 +91,8 @@ const Navbar = () => {
               <li className="px-4 py-2 font-bold text-xs opacity-50 uppercase">
                 Account: {user.first_name || 'User'}
               </li>
-              <li><Link to="/profile">My Profile</Link></li>
-              <li><Link to="/bookings">My Bookings</Link></li>
+              <li><Link to="/dashboard/profile">My Profile</Link></li>
+              <li><Link to="/dashboard/bookings">My Bookings</Link></li>
               <div className="divider my-1"></div>
               <li>
                 <button onClick={logout} className="text-error font-bold">
