@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Users, Mail, Phone, ShieldCheck, User as UserIcon, Loader2 } from 'lucide-react';
+import { Users, Mail, Phone, ShieldCheck, User as UserIcon, Loader2, ShieldAlert } from 'lucide-react';
 import toast from 'react-hot-toast';
 import authApiClient from '../../services/auth-api-client';
 import { Link } from 'react-router';
@@ -154,7 +154,7 @@ const CustomersPage = () => {
                       onClick={() => handlePromote(user)}
                       className="btn btn-ghost btn-xs text-success hover:bg-success/10 flex items-center gap-1"
                     >
-                      <ShieldCheck size={14} /> Promote
+                      <ShieldAlert size={14} /> Promote
                     </button>
                   )}
                   <button className="btn btn-ghost btn-xs text-error hover:bg-error/10">Restrict</button>
