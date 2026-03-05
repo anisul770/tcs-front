@@ -31,7 +31,7 @@ const HeroCarousel = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       nextSlide();
-    }, 2500);
+    }, 3500);
 
     return () => clearInterval(interval);
   }, [current]);
@@ -44,7 +44,7 @@ const HeroCarousel = () => {
   };
 
   return (
-    <div className="relative w-full h-[75vh] md:h-[85vh] overflow-hidden mt-16">
+    <div className="relative w-full h-[75vh] md:h-[85vh] overflow-hidden mt-18">
 
       {/* Slides wrapper */}
       <div

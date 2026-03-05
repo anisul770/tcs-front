@@ -21,6 +21,7 @@ import MyReviews from '../components/reviews/MyReviews';
 import CustomersPage from '../components/dashboard/CustomersPage';
 import CustomerDetailsPage from '../components/dashboard/CustomerDetailsPage';
 import AllReviews from '../components/reviews/AllReviews';
+import ManageCategories from '../components/dashboard/ManageCategories';
 
 const AppRoutes = () => {
   return (
@@ -46,6 +47,7 @@ const AppRoutes = () => {
           <Route path='bookings/:id' element={<BookingDetails />} />
           <Route path='cart' element={<Cart />} />
           <Route path='admin/services' element={<AdminServiceManager />} />
+          <Route path='admin/categories' element={<ManageCategories />} />
           <Route path='reviews' element={<MyReviews />} />
           <Route path='customers' element={<CustomersPage />} />
           <Route path='all-reviews' element={<AllReviews />} />

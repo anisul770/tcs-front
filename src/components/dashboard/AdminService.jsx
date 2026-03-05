@@ -191,78 +191,150 @@ const AdminServiceManager = () => {
       </div>
 
       {/* MODAL SECTION */}
-      <dialog className={`modal ${isModalOpen ? "modal-open" : ""} bg-base-300/60 backdrop-blur-sm`}>
-        <div className="modal-box max-w-2xl border border-base-200 p-8 rounded-3xl shadow-2xl">
-          <h3 className="text-3xl font-black italic uppercase tracking-tighter mb-8">
-            {selectedService ? "Modify" : "Create"} <span className="text-primary">Service</span>
-          </h3>
+      <dialog className={`modal ${isModalOpen ? "modal-open" : ""} bg-base-300/80 backdrop-blur-md`}>
+        {/* Added: flex flex-col and max-h-[90vh] to control the modal's maximum height */}
+        <div className="modal-box max-w-2xl bg-base-100 border border-base-200 p-0 rounded-[2.5rem] shadow-2xl flex flex-col max-h-[90vh] overflow-hidden animate-in fade-in zoom-in-95 duration-300 relative">
 
-          <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* --- MODAL HEADER (Sticky Top) --- */}
+          <div className="px-8 md:px-10 pt-10 pb-6 border-b border-base-200 bg-base-200/50 shrink-0">
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-primary/70 mb-2">Service Catalog Admin</p>
+            <h3 className="text-3xl md:text-4xl font-black italic uppercase tracking-tighter leading-none">
+              {selectedService ? "Modify" : "Create"} <span className="text-primary">Service</span>
+            </h3>
+          </div>
 
-            {/* Name Field */}
-            <div className="form-control md:col-span-2">
-              <label className="label text-[10px] font-black uppercase opacity-50 tracking-widest">Service Name</label>
-              <input
-                {...register("name", { required: "Service name is required" })}
-                type="text"
-                className={`input input-bordered font-bold ${errors.name ? 'input-error' : ''}`}
-              />
-              {errors.name && <p className="text-error text-[10px] mt-1 font-bold flex items-center gap-1"><AlertCircle size={10} /> {errors.name.message}</p>}
+          {/* --- FORM SECTION --- */}
+          {/* Added: flex flex-col and overflow-hidden to the form itself */}
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col overflow-hidden h-full">
+
+            {/* --- SCROLLABLE INPUTS AREA --- */}
+            {/* Added: flex-1 overflow-y-auto and our hidden scrollbar classes */}
+            <div className="px-8 md:px-10 py-8 flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-10">
+
+                {/* Name Field */}
+                <div className="form-control md:col-span-2">
+                  <label className="label py-0 pb-2">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-base-content/60">Service Designation</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      {...register("name", { required: "Service name is required" })}
+                      type="text"
+                      placeholder="e.g., Deep Residential Restoration"
+                      className={`input w-full bg-base-200/50 border-transparent focus:bg-base-100 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-2xl h-14 px-5 font-bold text-lg transition-all ${errors.name ? 'border-error focus:border-error focus:ring-error/20 bg-error/5' : ''}`}
+                    />
+                    {errors.name && (
+                      <div className="absolute -bottom-6 left-1 text-error text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
+                        <AlertCircle size={10} /> {errors.name.message}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Price Field */}
+                <div className="form-control relative">
+                  <label className="label py-0 pb-2">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-base-content/60">Investment (€)</span>
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-5 top-1/2 -translate-y-1/2 font-black italic text-base-content/40">€</span>
+                    <input
+                      {...register("price", { required: "Price is required", min: { value: 1, message: "Price must be at least 1" } })}
+                      type="number" step="0.01" placeholder="0.00"
+                      className={`input w-full pl-9 bg-base-200/50 border-transparent focus:bg-base-100 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-2xl h-14 font-black italic text-xl text-primary transition-all ${errors.price ? 'border-error focus:border-error focus:ring-error/20 bg-error/5' : ''}`}
+                    />
+                    {errors.price && (
+                      <div className="absolute -bottom-6 left-1 text-error text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
+                        <AlertCircle size={10} /> {errors.price.message}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Category Field */}
+                <div className="form-control relative">
+                  <label className="label py-0 pb-2">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-base-content/60">Classification</span>
+                  </label>
+                  <select
+                    {...register("category", { required: "Please select a classification" })}
+                    className={`select w-full bg-base-200/50 border-transparent focus:bg-base-100 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-2xl h-14 px-5 font-bold transition-all ${errors.category ? 'border-error focus:border-error focus:ring-error/20 bg-error/5' : ''}`}
+                  >
+                    <option value="" disabled hidden>Select Category</option>
+                    {categories.map(cat => (
+                      <option key={cat.id} value={cat.id}>{cat.name}</option>
+                    ))}
+                  </select>
+                  {errors.category && (
+                    <div className="absolute -bottom-6 left-1 text-error text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
+                      <AlertCircle size={10} /> {errors.category.message}
+                    </div>
+                  )}
+                </div>
+
+                {/* Description Field */}
+                <div className="form-control md:col-span-2 relative">
+                  <label className="label py-0 pb-2">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-base-content/60">Scope of Work</span>
+                  </label>
+                  <textarea
+                    {...register("description", { required: "Scope of work is required" })}
+                    placeholder="Detail the exact specifications of this service..."
+                    className={`textarea w-full bg-base-200/50 border-transparent focus:bg-base-100 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-2xl p-5 h-32 font-medium italic resize-none transition-all ${errors.description ? 'border-error focus:border-error focus:ring-error/20 bg-error/5' : ''}`}
+                  />
+                  {errors.description && (
+                    <div className="absolute -bottom-6 left-1 text-error text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
+                      <AlertCircle size={10} /> {errors.description.message}
+                    </div>
+                  )}
+                </div>
+
+                {/* Status Field */}
+                <div className="form-control md:col-span-2 bg-base-200/30 border border-base-200 rounded-2xl p-5 flex flex-row items-center justify-between group hover:bg-base-200/60 transition-colors">
+                  <div>
+                    <p className="text-[11px] font-black uppercase tracking-widest text-base-content">Catalog Visibility</p>
+                    <p className="text-xs font-medium italic text-base-content/50 mt-1">Make this service immediately available for booking.</p>
+                  </div>
+                  <input
+                    {...register("is_active")}
+                    type="checkbox"
+                    className="toggle toggle-primary toggle-lg shadow-sm"
+                  />
+                </div>
+
+              </div>
             </div>
 
-            {/* Price Field */}
-            <div className="form-control">
-              <label className="label text-[10px] font-black uppercase opacity-50 tracking-widest">Price (€)</label>
-              <input
-                {...register("price", { required: "Price is required", min: { value: 1, message: "Price must be at least 1" } })}
-                type="number" step="0.01"
-                className={`input input-bordered font-black text-primary ${errors.price ? 'input-error' : ''}`}
-              />
-              {errors.price && <p className="text-error text-[10px] mt-1 font-bold flex items-center gap-1"><AlertCircle size={10} /> {errors.price.message}</p>}
-            </div>
-
-            {/* Category Field */}
-            <div className="form-control">
-              <label className="label text-[10px] font-black uppercase opacity-50 tracking-widest">Category</label>
-              <select
-                {...register("category", { required: "Please select a category" })}
-                className={`select select-bordered font-bold ${errors.category ? 'select-error' : ''}`}
+            {/* --- MODAL ACTIONS (Sticky Bottom) --- */}
+            {/* Added: shrink-0 to prevent it from getting squished, and a blur effect so the scrolling looks seamless underneath it */}
+            <div className="px-8 md:px-10 py-6 border-t border-base-200 bg-base-100/95 backdrop-blur shrink-0 flex items-center justify-between gap-4 z-10">
+              <button
+                type="button"
+                className="btn btn-ghost rounded-2xl px-8 font-black uppercase tracking-widest text-[11px] text-base-content/50 hover:text-base-content"
+                onClick={() => setIsModalOpen(false)}
               >
-                <option value="">Select Category</option>
-                {categories.map(cat => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
-                ))}
-              </select>
-              {errors.category && <p className="text-error text-[10px] mt-1 font-bold flex items-center gap-1"><AlertCircle size={10} /> {errors.category.message}</p>}
-            </div>
-
-            {/* Description Field */}
-            <div className="form-control md:col-span-2">
-              <label className="label text-[10px] font-black uppercase opacity-50 tracking-widest">Description</label>
-              <textarea
-                {...register("description", { required: "Description is required" })}
-                className={`textarea textarea-bordered h-32 font-medium resize-none ${errors.description ? 'textarea-error' : ''}`}
-              />
-              {errors.description && <p className="text-error text-[10px] mt-1 font-bold flex items-center gap-1"><AlertCircle size={10} /> {errors.description.message}</p>}
-            </div>
-
-            {/* Status Field */}
-            <div className="form-control">
-              <label className="label cursor-pointer justify-start gap-4">
-                <span className="label text-[10px] font-black uppercase opacity-50 tracking-widest">Show in Catalog</span>
-                <input {...register("is_active")} type="checkbox" className="toggle toggle-primary shadow-sm" />
-              </label>
-            </div>
-
-            {/* Actions */}
-            <div className="modal-action md:col-span-2 mt-8 flex gap-4">
-              <button type="button" className="btn btn-ghost rounded-full px-8" onClick={() => setIsModalOpen(false)}>Cancel</button>
-              <button type="submit" disabled={actionLoading} className="btn btn-primary rounded-full px-10 flex-1 shadow-lg shadow-primary/30 font-black italic uppercase tracking-tighter">
-                {actionLoading ? <Loader2 className="animate-spin" size={20} /> : "Publish Changes"}
+                Abort
+              </button>
+              <button
+                type="submit"
+                disabled={actionLoading}
+                className="btn btn-primary rounded-2xl px-12 shadow-xl shadow-primary/20 font-black italic uppercase tracking-widest text-[12px] group"
+              >
+                {actionLoading ? (
+                  <Loader2 className="animate-spin" size={20} />
+                ) : (
+                  <>{selectedService ? "Commit Update" : "Deploy Service"} <span className="group-hover:translate-x-1 transition-transform inline-block ml-2">→</span></>
+                )}
               </button>
             </div>
           </form>
         </div>
+
+        {/* Closes modal on outside click */}
+        <form method="dialog" className="modal-backdrop">
+          <button onClick={() => setIsModalOpen(false)}>close</button>
+        </form>
       </dialog>
     </div>
   );

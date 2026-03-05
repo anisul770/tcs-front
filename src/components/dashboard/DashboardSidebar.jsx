@@ -1,97 +1,152 @@
 import { Link, NavLink } from "react-router";
 import useAuthContext from "../../hooks/useAuthContext";
-import {Home, LayoutDashboard, UserCircle,LayoutList, ShoppingCart, ClipboardList,Settings,Users,MessageSquare,ShieldCheck} from "lucide-react";
-
+import {
+  Home,
+  LayoutDashboard,
+  UserCircle,
+  LayoutList,
+  ShoppingCart,
+  ClipboardList,
+  Settings,
+  Users,
+  MessageSquare,
+  ShieldCheck,
+  Star,
+  Calendar,
+  Sparkles,
+  Layers
+} from "lucide-react";
 
 const DashboardSidebar = () => {
   const { user } = useAuthContext();
   const isStaff = user?.is_staff;
 
-  // Active state styling for links
+  // --- Elite Active State Styling ---
   const navClass = ({ isActive }) =>
-    `flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive
-      ? "bg-primary text-primary-content font-bold shadow-md"
-      : "text-base-content hover:bg-base-200 hover:text-primary font-medium"
+    `flex items-center gap-4 px-6 py-3.5 rounded-2xl transition-all duration-300 group ${isActive
+      ? "bg-primary text-primary-content font-black italic shadow-lg shadow-primary/20 scale-[1.02]"
+      : "text-base-content/60 hover:bg-base-200 hover:text-primary font-bold italic uppercase tracking-widest text-[11px]"
     }`;
 
   // Closes the drawer on mobile when a link is clicked
   const closeDrawer = () => {
-    document.getElementById('dashboard-drawer').checked = false;
+    const drawer = document.getElementById('dashboard-drawer');
+    if (drawer) drawer.checked = false;
   };
 
   return (
-    <div className="w-72 min-h-full bg-base-100 border-r border-base-200 flex flex-col p-4">
-      {/* Brand Logo */}
-      <div className="px-4 py-4 mb-6 hidden lg:block">
-        <h2 className="text-2xl font-black italic text-primary tracking-tight">
-          <Link to='/'>TCS<span className="text-base-content font-light">.clean</span></Link>
-        </h2>
+    <div className="w-72 h-screen sticky top-0 bg-base-100 border-r border-base-200 flex flex-col p-6 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+
+      {/* --- BRAND LOGO --- */}
+      <div className="px-2 py-6 mb-8 hidden lg:block">
+        <Link to='/' className="flex items-center gap-2 group">
+          <div className="bg-primary p-1.5 rounded-lg rotate-3 group-hover:rotate-0 transition-transform">
+            <Sparkles className="text-white w-5 h-5" />
+          </div>
+          <span className="text-2xl font-black italic uppercase tracking-tighter">
+            TCS<span className="text-primary text-[10px] ml-1">®</span>
+          </span>
+        </Link>
       </div>
 
-      {/* Navigation Links */}
+      {/* --- NAVIGATION LINKS --- */}
       <nav className="flex-1 space-y-2">
+
+        <div className="text-[10px] font-black uppercase tracking-[0.3em] text-base-content/30 px-4 mb-4">
+          Main Menu
+        </div>
+
         <NavLink to="/" end className={navClass} onClick={closeDrawer}>
-          <span><Home size={20} strokeWidth={2.5} /></span> Home
+          <Home size={20} strokeWidth={2.5} />
+          <span className="uppercase tracking-widest text-[11px]">Home</span>
         </NavLink>
 
         <NavLink to="/dashboard" end className={navClass} onClick={closeDrawer}>
-          <span><LayoutDashboard size={20} strokeWidth={2.5} /></span> Overview
+          <LayoutDashboard size={20} strokeWidth={2.5} />
+          <span className="uppercase tracking-widest text-[11px]">Overview</span>
         </NavLink>
 
         <NavLink to="/dashboard/profile" className={navClass} onClick={closeDrawer}>
-          <span><UserCircle size={20} strokeWidth={2.5} /></span> My Profile
+          <UserCircle size={20} strokeWidth={2.5} />
+          <span className="uppercase tracking-widest text-[11px]">My Profile</span>
         </NavLink>
 
         <NavLink to="/dashboard/cart" className={navClass} onClick={closeDrawer}>
-          <span><ShoppingCart size={20} strokeWidth={2.5} /></span> Cart
+          <ShoppingCart size={20} strokeWidth={2.5} />
+          <span className="uppercase tracking-widest text-[11px]">Cart</span>
         </NavLink>
 
         <NavLink to="/services" className={navClass} onClick={closeDrawer}>
-          <span><LayoutList size={20} strokeWidth={2.5} /></span> Services
+          <LayoutList size={20} strokeWidth={2.5} />
+          <span className="uppercase tracking-widest text-[11px]">Services</span>
         </NavLink>
 
-        {/* Client Links */}
+        {/* --- CLIENT SECTION --- */}
         {!isStaff && (
           <>
-            <div className="divider text-xs text-gray-400 font-bold uppercase my-6 px-4">Services</div>
+            <div className="pt-8 pb-4">
+              <div className="h-px bg-base-200 w-full mb-6"></div>
+              <div className="text-[10px] font-black uppercase tracking-[0.3em] text-base-content/30 px-4">
+                Bookings
+              </div>
+            </div>
+
             <NavLink to="/dashboard/bookings" className={navClass} onClick={closeDrawer}>
-              <span>📅</span> My Bookings
+              <Calendar size={20} strokeWidth={2.5} />
+              <span className="uppercase tracking-widest text-[11px]">My Bookings</span>
             </NavLink>
+
             <NavLink to="/dashboard/reviews" className={navClass} onClick={closeDrawer}>
-              <span>⭐</span> My Reviews
+              <Star size={20} strokeWidth={2.5} />
+              <span className="uppercase tracking-widest text-[11px]">My Reviews</span>
             </NavLink>
           </>
         )}
 
-        {/* Staff Links */}
+        {/* --- STAFF SECTION --- */}
         {isStaff && (
           <>
-            <div className="divider text-[10px] text-primary font-black uppercase my-6 px-4 tracking-widest opacity-70">
-              <ShieldCheck size={14} className="inline mr-2" /> Admin Controls
+            <div className="pt-8 pb-4">
+              <div className="h-px bg-primary/10 w-full mb-6"></div>
+              <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-primary px-4">
+                <ShieldCheck size={14} /> Admin Tools
+              </div>
             </div>
 
             <NavLink to="/dashboard/bookings" className={navClass} onClick={closeDrawer}>
-              <ClipboardList size={18} className="text-primary" />
-              <span className="ml-3">All Bookings</span>
+              <ClipboardList size={20} strokeWidth={2.5} />
+              <span className="uppercase tracking-widest text-[11px]">All Bookings</span>
             </NavLink>
 
             <NavLink to="/dashboard/admin/services" className={navClass} onClick={closeDrawer}>
-              <Settings size={18} className="text-primary" />
-              <span className="ml-3">Manage Services</span>
+              <Settings size={20} strokeWidth={2.5} />
+              <span className="uppercase tracking-widest text-[11px]">Management</span>
+            </NavLink>
+
+            <NavLink to="/dashboard/admin/categories" className={navClass} onClick={closeDrawer}>
+              <Layers size={20} strokeWidth={2.5} />
+              <span className="uppercase tracking-widest text-[11px]">Manage Categories</span>
             </NavLink>
 
             <NavLink to="/dashboard/customers" className={navClass} onClick={closeDrawer}>
-              <Users size={18} className="text-primary" />
-              <span className="ml-3">Customers</span>
+              <Users size={20} strokeWidth={2.5} />
+              <span className="uppercase tracking-widest text-[11px]">Customers</span>
             </NavLink>
 
             <NavLink to="/dashboard/all-reviews" className={navClass} onClick={closeDrawer}>
-              <MessageSquare size={18} className="text-primary" />
-              <span className="ml-3">All Reviews</span>
+              <MessageSquare size={20} strokeWidth={2.5} />
+              <span className="uppercase tracking-widest text-[11px]">All Reviews</span>
             </NavLink>
           </>
         )}
       </nav>
+
+      {/* --- BOTTOM LOGO / FOOTER --- */}
+      <div className="mt-auto pt-10 px-4">
+        <p className="text-[9px] font-black uppercase italic tracking-[0.2em] opacity-20">
+          TCS Transparent Cleaning Standard © 2026
+        </p>
+      </div>
     </div>
   );
 };

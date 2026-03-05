@@ -1,24 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import apiClient from '../services/api-client';
 
 const useCategories = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  useEffect(() => {
-    const fetchCategories = async () => {
-      setLoading(true);
-      try {
-        await apiClient.get("/categories").then((res) => setCategories(res.data));
-      } catch (error) {
-        setErrorMsg(error);
-      } finally {
-        setLoading(false);
-      }
+
+  const fetchCategories = async () => {
+    setLoading(true);
+    try {
+      const res = await apiClient.get("/categories");
+      setCategories(res.data);
+    } catch (error) {
+      setErrorMsg(error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
     fetchCategories();
-  }, [])
-  return { categories, loading ,errorMsg};
+  }, []);
+
+  // Return fetchCategories as 'refresh'
+  return { categories, loading, errorMsg, refresh: fetchCategories };
 };
 
 export default useCategories;
