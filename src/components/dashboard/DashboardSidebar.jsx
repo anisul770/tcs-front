@@ -1,6 +1,6 @@
 import { Link, NavLink } from "react-router";
 import useAuthContext from "../../hooks/useAuthContext";
-import { LayoutList, ShoppingCart } from "lucide-react";
+import {Home, LayoutDashboard, UserCircle,LayoutList, ShoppingCart, ClipboardList,Settings,Users,MessageSquare,ShieldCheck} from "lucide-react";
 
 
 const DashboardSidebar = () => {
@@ -8,11 +8,10 @@ const DashboardSidebar = () => {
   const isStaff = user?.is_staff;
 
   // Active state styling for links
-  const navClass = ({ isActive }) => 
-    `flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
-      isActive 
-        ? "bg-primary text-primary-content font-bold shadow-md" 
-        : "text-base-content hover:bg-base-200 hover:text-primary font-medium"
+  const navClass = ({ isActive }) =>
+    `flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${isActive
+      ? "bg-primary text-primary-content font-bold shadow-md"
+      : "text-base-content hover:bg-base-200 hover:text-primary font-medium"
     }`;
 
   // Closes the drawer on mobile when a link is clicked
@@ -31,17 +30,24 @@ const DashboardSidebar = () => {
 
       {/* Navigation Links */}
       <nav className="flex-1 space-y-2">
+        <NavLink to="/" end className={navClass} onClick={closeDrawer}>
+          <span><Home size={20} strokeWidth={2.5} /></span> Home
+        </NavLink>
+
         <NavLink to="/dashboard" end className={navClass} onClick={closeDrawer}>
-          <span>📊</span> Overview
+          <span><LayoutDashboard size={20} strokeWidth={2.5} /></span> Overview
         </NavLink>
+
         <NavLink to="/dashboard/profile" className={navClass} onClick={closeDrawer}>
-          <span>⚙️</span> My Profile
+          <span><UserCircle size={20} strokeWidth={2.5} /></span> My Profile
         </NavLink>
+
         <NavLink to="/dashboard/cart" className={navClass} onClick={closeDrawer}>
           <span><ShoppingCart size={20} strokeWidth={2.5} /></span> Cart
         </NavLink>
+
         <NavLink to="/services" className={navClass} onClick={closeDrawer}>
-          <span><LayoutList size={20} strokeWidth={2.5} /></span> Services  
+          <span><LayoutList size={20} strokeWidth={2.5} /></span> Services
         </NavLink>
 
         {/* Client Links */}
@@ -60,15 +66,28 @@ const DashboardSidebar = () => {
         {/* Staff Links */}
         {isStaff && (
           <>
-            <div className="divider text-xs text-primary font-bold uppercase my-6 px-4">Admin Controls</div>
+            <div className="divider text-[10px] text-primary font-black uppercase my-6 px-4 tracking-widest opacity-70">
+              <ShieldCheck size={14} className="inline mr-2" /> Admin Controls
+            </div>
+
             <NavLink to="/dashboard/bookings" className={navClass} onClick={closeDrawer}>
-              <span>📋</span> All Bookings
+              <ClipboardList size={18} className="text-primary" />
+              <span className="ml-3">All Bookings</span>
             </NavLink>
+
             <NavLink to="/dashboard/admin/services" className={navClass} onClick={closeDrawer}>
-              <span>🛠️</span> Manage Services
+              <Settings size={18} className="text-primary" />
+              <span className="ml-3">Manage Services</span>
             </NavLink>
+
             <NavLink to="/dashboard/customers" className={navClass} onClick={closeDrawer}>
-              <span>👥</span> Customers
+              <Users size={18} className="text-primary" />
+              <span className="ml-3">Customers</span>
+            </NavLink>
+
+            <NavLink to="/dashboard/all-reviews" className={navClass} onClick={closeDrawer}>
+              <MessageSquare size={18} className="text-primary" />
+              <span className="ml-3">All Reviews</span>
             </NavLink>
           </>
         )}

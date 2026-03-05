@@ -44,7 +44,7 @@ const CategoryCard = ({ name,id, service_count }) => {
         </p>
 
         {/* Hover Arrow Indicator */}
-        <div className="mt-4 translate-y-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+        <div className="mt-4 translate-y-4 md:opacity-0 transition-all duration-300 md:group-hover:translate-y-0 md:group-hover:opacity-100">
           <Link to={`/services/?category=${id}`}><span className="text-xs font-bold text-primary flex items-center gap-1">
             Explore <span className="text-lg">→</span>
           </span></Link>

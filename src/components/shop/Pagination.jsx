@@ -4,7 +4,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   if (totalPages <= 1) return null; // Don't show pagination if there's only 1 page
 
   return (
-    <div className="flex justify-center mt-8">
+    <div className="flex justify-center my-8">
       <div className="join">
         {/* Previous Button */}
         <button 

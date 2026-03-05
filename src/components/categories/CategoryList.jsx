@@ -17,7 +17,7 @@ const CategoryList = () => {
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
           <div className="max-w-md">
-            <h2 className="text-3xl font-black italic text-base-content uppercase tracking-tighter">
+            <h2 className="text-4xl font-black italic text-base-content uppercase tracking-tighter">
               Browse <span className="text-primary">Categories</span>
             </h2>
             <p className="text-sm text-base-content/60 font-medium">
