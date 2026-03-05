@@ -27,6 +27,7 @@ const ShopPage = () => {
 
   // 4. IMPORTANT: Reset to page 1 if any filter changes
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentPage(1);
   }, [selectedCategory, ordering, priceRange, searchQuery]);
 

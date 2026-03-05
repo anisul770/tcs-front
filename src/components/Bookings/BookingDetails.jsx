@@ -32,6 +32,7 @@ const BookingDetails = () => {
 
   useEffect(() => {
     if (currentOrder && currentOrder.id === id) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setOrder(currentOrder);
       setLoading(false);
     }

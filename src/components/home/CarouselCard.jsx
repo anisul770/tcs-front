@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 const CarouselCard = ({
   title,
   description,
@@ -7,7 +9,7 @@ const CarouselCard = ({
 }) => {
   return (
     <div className="relative w-full h-full">
-      
+
       {/* Background Image */}
       <img
         src={image}
@@ -28,12 +30,16 @@ const CarouselCard = ({
         </p>
 
         <div className="flex gap-4">
-          <button className="btn btn-primary">
-            {primaryBtnText}
-          </button>
-          <button className="btn btn-outline text-white border-white hover:bg-white hover:text-black">
-            {secondaryBtnText}
-          </button>
+          <Link to={'/login'}>
+            <button className="btn btn-primary">
+              {primaryBtnText}
+            </button>
+          </Link>
+          <Link to={'/services'}>
+            <button className="btn btn-outline text-white border-white hover:bg-white hover:text-black">
+              {secondaryBtnText}
+            </button>
+          </Link>
         </div>
       </div>
     </div>
