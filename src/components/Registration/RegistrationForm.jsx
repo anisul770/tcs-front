@@ -1,3 +1,5 @@
+import { Eye, EyeOff } from 'lucide-react';
+
 const RegistrationForm = ({register,errors,showPassword,setShowPassword,showConfirmPassword,setShowConfirmPassword,password}) => {
   return (
     <>
