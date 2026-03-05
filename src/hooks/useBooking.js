@@ -41,8 +41,8 @@ const useBooking = () => {
     try {
       await authApiClient.patch(`/orders/${id}/update_status/`, { status: newStatus });
       toast.success(`Status updated to ${newStatus}`);
-      const data = await fetchOrderDetails(id); // Refresh specific order
-      await fetchBookings(); // Refresh list in background
+      const data = await fetchOrderDetails(id); 
+      await fetchBookings(); 
       return { success: true, data: data };
     } catch (error) {
       return { success: false, msg: error.response?.data?.detail || "Update failed" };

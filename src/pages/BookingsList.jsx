@@ -7,7 +7,6 @@ const BookingsList = () => {
   const { bookings, isLoading, fetchBookings } = useBookingContext();
 
   useEffect(() => {
-    // Only fetch if we don't have bookings yet, or to ensure fresh data
     fetchBookings();
   }, [fetchBookings]);
 

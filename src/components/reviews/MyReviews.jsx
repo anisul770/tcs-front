@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Star, MessageSquare, Calendar, Loader2, Tag, Quote } from 'lucide-react';
+import { Star, MessageSquare, Calendar, Loader2, Tag, Quote, ArrowUpRight } from 'lucide-react';
 import toast from 'react-hot-toast';
 import authApiClient from '../../services/auth-api-client';
+import { Link } from 'react-router';
 
 const MyReviews = () => {
   const [reviews, setReviews] = useState([]);
@@ -48,9 +49,9 @@ const MyReviews = () => {
             <div key={review.id} className="relative group">
               {/* Background Decorative Element */}
               <div className="absolute inset-0 bg-primary/5 rounded-3xl rotate-1 group-hover:rotate-0 transition-transform duration-300"></div>
-              
+
               <div className="relative bg-base-100 rounded-2xl p-6 shadow-sm border border-base-200 hover:shadow-xl transition-all duration-300">
-                
+
                 {/* Top Section: Category & Date */}
                 <div className="flex justify-between items-center mb-4">
                   <span className="px-3 py-1 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest rounded-full flex items-center gap-1">
@@ -64,9 +65,16 @@ const MyReviews = () => {
 
                 {/* Service Details */}
                 <div className="mb-4">
-                  <h3 className="text-xl font-black italic text-base-content uppercase leading-tight">
-                    {review.service.name}
-                  </h3>
+                  <div className="flex justify-between items-start mb-2">
+                    <Link to={`/services/${review.service.id}`} className="flex-grow">
+                      <h3 className="text-lg font-black italic uppercase tracking-tighter leading-tight group-hover:text-primary transition-colors line-clamp-1">
+                        {review.service.name}
+                      </h3>
+                    </Link>
+                    <Link to={`/services/${review.service.id}`} className="p-1.5 rounded-full bg-base-200 group-hover:bg-primary group-hover:text-primary-content transition-all ml-2">
+                      <ArrowUpRight size={14} />
+                    </Link>
+                  </div>
                   <p className="text-primary font-bold text-sm mt-1">${review.service.price}</p>
                 </div>
 

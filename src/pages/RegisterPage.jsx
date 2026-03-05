@@ -23,7 +23,6 @@ const Register = () => {
   const password = watch("password", "");
 
   const onSubmit = async (data) => {
-    // We don't need manual password checking here anymore since React Hook Form handles it!
     const res = await registerUser(data);
 
     if (res?.success) {

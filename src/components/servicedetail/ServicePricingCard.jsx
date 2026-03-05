@@ -10,18 +10,18 @@ const ServicePricingCard = ({ price, service }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
 
-  // Flow 1: Just add to cart and stay on page
+  
   const handleAddToCart = async () => {
     setIsAdding(true);
     await addCartItems(service.id, 1);
     setIsAdding(false);
   };
 
-  // Flow 2: Direct Booking (Add to cart + Redirect to Cart Page)
+
   const handleDirectBooking = async () => {
     setIsBooking(true);
     await addCartItems(service.id, 1);
-    navigate("/dashboard/cart"); // Take them straight to the finish line
+    navigate("/dashboard/cart"); 
   };
 
   return (

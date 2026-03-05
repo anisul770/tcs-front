@@ -1,14 +1,14 @@
-import React from 'react';
+import { Search, Tags, ArrowDownUp, Coins } from 'lucide-react';
 
-const FilterSection = ({ 
-  searchQuery, setSearchQuery, 
-  selectedCategory, setSelectedCategory, 
-  ordering, setOrdering, 
+const FilterSection = ({
+  searchQuery, setSearchQuery,
+  selectedCategory, setSelectedCategory,
+  ordering, setOrdering,
   priceRange, setPriceRange,
-  categories // Assuming you pass categories down
+  categories
 }) => {
-  
-  // Helper to update just one part of the price array
+
+  // Helper to update just one part of the price array (Unchanged Logic)
   const handlePriceChange = (index, value) => {
     const newRange = [...priceRange];
     newRange[index] = Number(value);
@@ -16,97 +16,126 @@ const FilterSection = ({
   };
 
   return (
-    <div className="bg-base-100 p-6 rounded-2xl shadow-sm border border-base-200 mb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-start">
-      
-      {/* Price Range (Min / Max) */}
-      <div className="form-control w-full flex-row gap-2">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Price Range
-        </label>
-        {/* Min Range  */}
-        <div className="flex items-center space-x-4">
-          <input
-            type="number"
-            min={0}
-            max={priceRange[1]}
-            value={priceRange[0]}
-            onChange={(e) => handlePriceChange(0, Number(e.target.value))}
-            className="w-20 p-2 border rounded-md" />
-          <input
-            type="range"
-            min={0}
-            max={priceRange[1]}
-            step={10}
-            value={priceRange[0]}
-            onChange={(e) => handlePriceChange(0, Number(e.target.value))}
-            className="w-full" />
+    <div className="bg-base-100 p-8 rounded-[2rem] shadow-2xl border border-base-200 mb-10 animate-in fade-in slide-in-from-top-4 duration-500">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-start">
+
+        {/* --- Search Input --- */}
+        <div className="form-control w-full">
+          <label className="label py-0 pb-3">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-base-content/60 flex items-center gap-2">
+              <Search size={12} /> Search Directory
+            </span>
+          </label>
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="e.g. Deep Clean..."
+              className="input w-full bg-base-200/50 border-transparent focus:bg-base-100 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-2xl h-14 px-5 font-bold text-base transition-all"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
         </div>
-        {/* Max Range  */}
-        <div className="flex items-center space-x-4">
-          <input
-            type="number"
-            min={priceRange[0]}
-            max={500}
-            value={priceRange[1]}
-            onChange={(e) => handlePriceChange(1, Number(e.target.value))}
-            className="w-20 p-2 border rounded-md" />
-          <input
-            type="range"
-            min={priceRange[0]}
-            max={500}
-            step={10}
-            value={priceRange[1]}
-            onChange={(e) => handlePriceChange(1, Number(e.target.value))}
-            className="w-full" />
+
+        {/* --- Category Dropdown --- */}
+        <div className="form-control w-full">
+          <label className="label py-0 pb-3">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-base-content/60 flex items-center gap-2">
+              <Tags size={12} /> Classification
+            </span>
+          </label>
+          <select
+            className="select w-full bg-base-200/50 border-transparent focus:bg-base-100 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-2xl h-14 px-5 font-bold text-base transition-all"
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            <option value="">All Categories</option>
+            {categories?.map(cat => (
+              <option key={cat.id} value={cat.id}>{cat.name}</option>
+            ))}
+          </select>
         </div>
-        <div className="flex justify-between text-sm text-gray-600 mt-2">
-          <span>${priceRange[0]}</span>
-          <span>${priceRange[1]}</span>
+
+        {/* --- Ordering Dropdown --- */}
+        <div className="form-control w-full">
+          <label className="label py-0 pb-3">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-base-content/60 flex items-center gap-2">
+              <ArrowDownUp size={12} /> Sort Order
+            </span>
+          </label>
+          <select
+            className="select w-full bg-base-200/50 border-transparent focus:bg-base-100 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-2xl h-14 px-5 font-bold text-base transition-all"
+            value={ordering}
+            onChange={(e) => setOrdering(e.target.value)}
+          >
+            <option value="">Recommended</option>
+            <option value="price">Investment: Low to High</option>
+            <option value="-price">Investment: High to Low</option>
+            <option value="-avg_rating">Highest Rated</option>
+          </select>
         </div>
-      </div>
-      {/* Search Input */}
-      <div className="form-control w-full">
-        <label className="label cursor-pointer pb-1"><span className="label-text text-xs font-bold uppercase">Search</span></label>
-        <input 
-          type="text" 
-          placeholder="e.g. Deep Clean..." 
-          className="input input-bordered w-full" 
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </div>
 
-      {/* Category Dropdown */}
-      <div className="form-control w-full">
-        <label className="label pb-1"><span className="label-text text-xs font-bold uppercase">Category</span></label>
-        <select 
-          className="select select-bordered w-full"
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-        >
-          <option value="">All Categories</option>
-          {categories?.map(cat => (
-            <option key={cat.id} value={cat.id}>{cat.name}</option>
-          ))}
-        </select>
+        {/* --- Price Range (Min / Max) --- */}
+        <div className="form-control w-full">
+          <label className="label py-0 pb-3">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-base-content/60 flex items-center gap-2">
+              <Coins size={12} /> Investment Range
+            </span>
+          </label>
+
+          <div className="bg-base-200/30 border border-base-200 p-4 rounded-2xl flex flex-col gap-3">
+            {/* Number Inputs */}
+            <div className="flex justify-between items-center gap-3">
+              <div className="relative w-full">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40 font-black italic text-xs">€</span>
+                <input
+                  type="number"
+                  min={0}
+                  max={priceRange[1]}
+                  value={priceRange[0]}
+                  onChange={(e) => handlePriceChange(0, Number(e.target.value))}
+                  className="input input-sm w-full pl-7 bg-base-100 border-transparent focus:border-primary rounded-xl font-bold text-sm h-10 transition-colors"
+                />
+              </div>
+              <span className="text-base-content/30 font-black">-</span>
+              <div className="relative w-full">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/40 font-black italic text-xs">€</span>
+                <input
+                  type="number"
+                  min={priceRange[0]}
+                  max={500}
+                  value={priceRange[1]}
+                  onChange={(e) => handlePriceChange(1, Number(e.target.value))}
+                  className="input input-sm w-full pl-7 bg-base-100 border-transparent focus:border-primary rounded-xl font-bold text-sm h-10 transition-colors"
+                />
+              </div>
+            </div>
+
+            {/* Range Sliders */}
+            <div className="flex flex-col gap-1 mt-1">
+              <input
+                type="range"
+                min={0}
+                max={priceRange[1]}
+                step={10}
+                value={priceRange[0]}
+                onChange={(e) => handlePriceChange(0, Number(e.target.value))}
+                className="range range-primary range-xs w-full opacity-70 hover:opacity-100 transition-opacity"
+              />
+              <input
+                type="range"
+                min={priceRange[0]}
+                max={500}
+                step={10}
+                value={priceRange[1]}
+                onChange={(e) => handlePriceChange(1, Number(e.target.value))}
+                className="range range-primary range-xs w-full opacity-70 hover:opacity-100 transition-opacity"
+              />
+            </div>
+          </div>
+        </div>
+
       </div>
-
-      {/* Ordering Dropdown */}
-      <div className="form-control w-full">
-        <label className="label pb-1"><span className="label-text text-xs font-bold uppercase">Sort By</span></label>
-        <select 
-          className="select select-bordered w-full"
-          value={ordering}
-          onChange={(e) => setOrdering(e.target.value)}
-        >
-          <option value="">Recommended</option>
-          <option value="price">Price: Low to High</option>
-          <option value="-price">Price: High to Low</option>
-          <option value="-avg_rating">Highest Rated</option>
-        </select>
-      </div>
-
-
     </div>
   );
 };

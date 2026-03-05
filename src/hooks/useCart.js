@@ -3,7 +3,7 @@ import authApiClient from "../services/auth-api-client";
 import toast from "react-hot-toast";
 
 const useCart = () => {
-  const [cart, setCart] = useState(null); // Changed to null as your API returns an object
+  const [cart, setCart] = useState(null); 
   const [cartId, setCartId] = useState(() => localStorage.getItem("cartId"));
   const [loading, setLoading] = useState(false);
 
@@ -12,13 +12,10 @@ const useCart = () => {
     try {
       const res = await authApiClient.post('/carts/', {});
 
-      // FIX: Use res.data.id, not the old cartId variable
       if (!cartId) {
         localStorage.setItem("cartId", res.data.id);
         setCartId(res.data.id);
       }
-
-      // Assuming your API returns an array, we take the first one
       setCart(res.data);
       return { success: true };
     } catch (error) {
@@ -55,7 +52,6 @@ const useCart = () => {
       );
 
       if (res.status === 200) {
-        // OPTIONAL: Refresh the cart data so the UI totals update
         await createOrGetCart();
         return { success: true };
       }
@@ -71,10 +67,8 @@ const useCart = () => {
     if (!cartId) return;
 
     try {
-      // 1. Make the delete call
       await authApiClient.delete(`/carts/${cartId}/items/${id}/`);
 
-      // 2. Refresh the cart data so the "Grand Total" and "Items List" update
       await createOrGetCart();
 
       toast.success("Service removed from cart");

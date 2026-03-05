@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import ProfileInfoForm from "../components/Profile/ProfileInfoForm";
 import ProfileLeft from "../components/Profile/ProfileLeft";
-import PasswordChangeForm from "../components/Profile/PasswordChangeForm"; // <-- Import the new component
+import PasswordChangeForm from "../components/Profile/PasswordChangeForm"; 
 
 const ProfileSettings = () => {
   const { user, updateProfile } = useAuthContext();

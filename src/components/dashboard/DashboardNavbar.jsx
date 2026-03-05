@@ -64,7 +64,7 @@ const DashboardNavbar = () => {
             </div>
           </div>
 
-          <ul tabIndex={0} className="mt-4 z-[1] p-2 shadow-2xl menu menu-sm dropdown-content bg-base-100 rounded-[2rem] w-64 border border-base-200 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+          <ul tabIndex={0} className="mt-4 z-[1] p-2 shadow-2xl menu menu-sm dropdown-content bg-base-100 rounded-[1rem] w-64 border border-base-200 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
             <div className="px-5 py-4 bg-base-200/50 rounded-[1.5rem] mb-2 lg:hidden">
                 <p className="text-[9px] font-black uppercase opacity-40 tracking-[0.2em] mb-1">User session</p>
                 <p className="font-black italic uppercase text-xs truncate">{displayName}</p>
