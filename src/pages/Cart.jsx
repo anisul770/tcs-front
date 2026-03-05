@@ -54,9 +54,6 @@ const Cart = () => {
     }
   };
 
-  // const removeCartItem =async(id) =>{
-
-  // }
 
   const subtotal = localCart?.items?.reduce((acc, item) => acc + (parseFloat(item.service.price) * item.quantity), 0) || 0;
 

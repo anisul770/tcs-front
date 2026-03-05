@@ -4,6 +4,7 @@ import { Plus, Edit2, Trash2, Loader2, FolderOpen, CheckCircle, XCircle, Chevron
 import toast from "react-hot-toast";
 import authApiClient from "../../services/auth-api-client";
 import apiClient from "../../services/api-client";
+import { Link } from "react-router";
 
 const AdminServiceManager = () => {
   const [services, setServices] = useState([]);
@@ -145,10 +146,12 @@ const AdminServiceManager = () => {
             {services.map((s) => (
               <tr key={s.id} className="hover:bg-base-200/40 transition-colors group">
                 <td className="pl-8 py-4">
-                  <div>
-                    <span className="font-bold text-sm block">{s.name}</span>
-                    <span className="text-[10px] opacity-40 truncate max-w-[200px] inline-block">{s.description}</span>
-                  </div>
+                  <Link to={`/services/${s.id}`}>
+                    <div>
+                      <span className="font-bold text-sm block">{s.name}</span>
+                      <span className="text-[10px] opacity-40 truncate max-w-[200px] inline-block">{s.description}</span>
+                    </div>
+                  </Link>
                 </td>
                 <td>
                   <span className="badge badge-ghost font-bold text-[10px] uppercase py-3 px-3">

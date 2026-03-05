@@ -15,6 +15,8 @@ import RegisterPage from '../pages/RegisterPage';
 import ActivateAccount from '../components/Registration/ActivateAccount'
 import BookingDetails from '../components/Bookings/BookingDetails';
 import AdminServiceManager from '../components/dashboard/AdminService';
+import ForgotPassword from '../components/Profile/ForgotPassword';
+import ResetPasswordConfirm from '../components/Profile/ResetPasswordConfirm';
 
 const AppRoutes = () => {
   return (
@@ -28,6 +30,8 @@ const AppRoutes = () => {
           <Route path='login' element={<LoginPage />} />
           <Route path='register' element={<RegisterPage />} />
           <Route path='activate/:uid/:token/' element={<ActivateAccount />} />
+          <Route path='forgot-password' element={<ForgotPassword />} />
+          <Route path='password/reset/confirm/:uid/:token/' element={<ResetPasswordConfirm />} />
         </Route>
         <Route path='dashboard' element={<PrivateRoute >
           <DashboardLayout />

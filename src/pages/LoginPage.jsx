@@ -1,12 +1,14 @@
-
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import useAuthContext from '../hooks/useAuthContext';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { Eye, EyeOff } from 'lucide-react';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { loginUser, loading, errorMsg } = useAuthContext();
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -15,11 +17,10 @@ const LoginPage = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    // 'data' will now be { email: "...", password: "..." }
     const result = await loginUser(data);
     if (result.success) {
       navigate('/dashboard');
-    }else{
+    } else {
       toast.error(errorMsg || "Backend server is offline. Please check your connection.");
     }
   };
@@ -45,7 +46,7 @@ const LoginPage = () => {
             </div>
           )}
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 w-full">
 
             {/* Email Field */}
             <div className="form-control">
@@ -73,15 +74,28 @@ const LoginPage = () => {
             <div className="form-control">
               <label className="label py-1 flex justify-between">
                 <span className="label-text font-bold text-xs uppercase text-gray-400">Password</span>
+                <Link to="/forgot-password" size="sm" className="label-text-alt link link-primary font-bold no-underline hover:underline">
+                  Forgot Password?
+                </Link>
               </label>
-              <input
-                type="password"
-                placeholder="••••••••"
-                className={`input input-bordered focus:input-primary ${errors.password ? 'input-error' : ''}`}
-                {...register("password", {
-                  required: "Password is required"
-                })}
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  className={`input input-bordered w-full focus:input-primary ${errors.password ? 'input-error' : ''} pr-10`}
+                  {...register("password", {
+                    required: "Password is required"
+                  })}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute inset-y-0 right-3 flex items-center text-base-content/50 hover:text-primary transition-colors"
+                  tabIndex="-1"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
               {errors.password && (
                 <span className="text-error text-xs mt-1 font-medium">{errors.password.message}</span>
               )}
@@ -101,7 +115,7 @@ const LoginPage = () => {
             </div>
           </form>
 
-          <div className="divider text-gray-400 text-[10px] uppercase font-bold">New to our platform?</div>
+          <div className="divider text-gray-400 text-[10px] uppercase font-bold w-full">New to our platform?</div>
 
           <div className="text-center">
             <Link to="/register" className="btn btn-outline btn-sm rounded-lg text-xs">

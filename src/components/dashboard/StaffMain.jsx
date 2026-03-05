@@ -21,7 +21,7 @@ const StaffMain = () => {
   }, [fetchBookings]);
 
   // Calculations
-  const pendingOrders = bookings.filter(b => b.status === "Pending" || b.status === "Not Paid");
+  const pendingOrders = bookings.filter(b => b.status === "Pending");
   const completedOrders = bookings.filter(b => b.status === "Delivered");
 
   const totalRevenue = completedOrders.reduce((sum, b) => {
@@ -185,9 +185,9 @@ const StaffMain = () => {
                           <p className="text-[10px] font-bold opacity-30 uppercase italic">Ref: Customer_{order.user}</p>
                         </td>
                         <td className="py-6">
-                          <span className="font-bold text-xs uppercase text-primary tracking-tighter">
+                          <Link to={`/dashboard/bookings/${order.id}`} state={{ orderData: order }}><span className="font-bold text-xs uppercase text-primary tracking-tighter">
                             {order.items[0]?.service?.name || "Premium Cleaning"}
-                          </span>
+                          </span></Link>
                           {order.items.length > 1 && <span className="ml-2 text-[10px] font-black opacity-30">+{order.items.length - 1} More</span>}
                         </td>
                         <td>

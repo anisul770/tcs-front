@@ -8,6 +8,7 @@ const useCart = () => {
   const [loading, setLoading] = useState(false);
 
   const createOrGetCart = useCallback(async () => {
+    if(!localStorage.getItem('authTokens')) return;
     try {
       const res = await authApiClient.post('/carts/', {});
 

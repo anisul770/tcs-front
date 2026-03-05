@@ -3,6 +3,8 @@ import useAuthContext from "../hooks/useAuthContext";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import ProfileInfoForm from "../components/Profile/ProfileInfoForm";
+import ProfileLeft from "../components/Profile/ProfileLeft";
+import PasswordChangeForm from "../components/Profile/PasswordChangeForm"; // <-- Import the new component
 
 const ProfileSettings = () => {
   const { user, updateProfile } = useAuthContext();
@@ -10,9 +12,7 @@ const ProfileSettings = () => {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
-  // const [successMsg, setSuccessMsg] = useState("");
 
-  // 1. Initialize React Hook Form with default values from Context
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm({
     defaultValues: {
       first_name: user?.first_name || '',
@@ -21,14 +21,10 @@ const ProfileSettings = () => {
       bio: user?.bio || '',
       facebook_link: user?.facebook_link || '',
       phone_number: user?.phone_number || '',
-      // Add other fields from your Swagger here if needed (e.g., phone)
     }
   });
 
-  // 2. Handle the Patch request
   const onSubmit = async (data) => {
-    // payload is good, but let's use the result from updateProfile
-    console.log(data);
     const payload = {
       first_name: data.first_name,
       last_name: data.last_name,
@@ -41,7 +37,7 @@ const ProfileSettings = () => {
 
     if (res?.success) {
       toast.success(res.message || 'Profile updated!');
-      setIsEditing(false); // Close the edit mode on success
+      setIsEditing(false);
     } else {
       toast.error(res?.error || "Failed to update profile.");
     }
@@ -50,10 +46,8 @@ const ProfileSettings = () => {
   const handleProfilePic = (e) => {
     const selectedFile = e.target.files[0];
     if (!selectedFile) return;
-    console.log(selectedFile);
     const formData = new FormData();
     formData.append('profile_pic', selectedFile);
-    console.log(formData);
     setImage(formData);
     setPreview(URL.createObjectURL(selectedFile));
   };
@@ -74,9 +68,8 @@ const ProfileSettings = () => {
     setIsSaving(false);
   };
 
-  // 3. Reset form if user cancels editing
   const handleCancel = () => {
-    reset(); // Reverts fields to defaultValues
+    reset();
     setIsEditing(false);
   };
 
@@ -88,90 +81,44 @@ const ProfileSettings = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left Column */}
+        <ProfileLeft preview={preview} user={user} handleProfilePic={handleProfilePic} uploadPhoto={uploadPhoto} isSaving={isSaving}/>
 
-        {/* Left Column: Avatar & Quick Info */}
-        <div className="card bg-base-100 border border-base-300 shadow-sm p-8 text-center h-fit">
-          <div className="avatar mb-4">
-            <div className="w-32 h-32 rounded-full ring ring-primary ring-offset-base-100 ring-offset-4 mx-auto bg-neutral text-neutral-content flex items-center justify-center overflow-hidden">
-              {/* Use preview if it exists, otherwise use the saved user profile_pic */}
-              {(preview || user?.profile_pic) ? (
-                <img src={preview || user.profile_pic} alt="Profile" className="object-cover w-full h-full" />
-              ) : (
-                <span className="text-4xl font-black uppercase">
-                  {user?.first_name?.charAt(0) || user?.email?.charAt(0)}
-                </span>
-              )}
-            </div>
-          </div>
-          <h2 className="text-xl font-bold">{user?.first_name} {user?.last_name}</h2>
-          <p className="text-sm opacity-60 mb-6">{user?.email}</p>
-
-          <div className="flex flex-col gap-2">
-            {/* Hidden input for logic */}
-            <input
-              type="file"
-              id="profile-upload"
-              className="hidden"
-              accept="image/*"
-              onChange={handleProfilePic}
-            />
-
-            {/* Label styled exactly like your original button */}
-            <label
-              htmlFor="profile-upload"
-              className="btn btn-outline btn-sm w-full cursor-pointer"
-            >
-              {preview ? "Change Selection" : "Change Photo"}
-            </label>
-
-            {/* Action button appears only when a new photo is selected */}
-            {preview && (
-              <button
-                onClick={uploadPhoto}
-                disabled={isSaving}
-                className="btn btn-primary btn-sm w-full animate-in slide-in-from-top-1"
-              >
-                {isSaving ? <>
-                  <span className="loading loading-spinner loading-xs"></span>
-                  Saving photo...
-                </> : 'Confirm Upload'}
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Right Column: Personal Information Form */}
-        <div className="lg:col-span-2 card bg-base-100 border border-base-300 shadow-sm">
-          <div className="p-6 border-b border-base-200 flex justify-between items-center">
-            <h3 className="font-black text-lg">Personal Information</h3>
-            <div>
-              {isEditing ? (
-                <button onClick={handleCancel} className="btn btn-sm btn-ghost mr-2">Cancel</button>
-              ) : (
-                <button onClick={() => setIsEditing(true)} className="btn btn-sm btn-primary">Edit Profile</button>
-              )}
-            </div>
-          </div>
-
-          <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
-
-            <ProfileInfoForm register={register} isEditing={isEditing} errors={errors} />
-            {/* Save Button */}
-            {isEditing && (
-              <div className="flex justify-end pt-4">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={`btn btn-primary px-8 shadow-lg shadow-primary/20`}
-                >
-                  {isSubmitting ? <>
-                    <span className="loading loading-spinner loading-sm"></span>
-                    Saving...
-                  </> : 'Save Changes'}
-                </button>
+        {/* Right Column (Wrapped to stack cards) */}
+        <div className="lg:col-span-2">
+          
+          {/* Personal Information Form */}
+          <div className="card bg-base-100 border border-base-300 shadow-sm">
+            <div className="p-6 border-b border-base-200 flex justify-between items-center">
+              <h3 className="font-black text-lg">Personal Information</h3>
+              <div>
+                {isEditing ? (
+                  <button onClick={handleCancel} className="btn btn-sm btn-ghost mr-2">Cancel</button>
+                ) : (
+                  <button onClick={() => setIsEditing(true)} className="btn btn-sm btn-primary">Edit Profile</button>
+                )}
               </div>
-            )}
-          </form>
+            </div>
+
+            <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
+              <ProfileInfoForm register={register} isEditing={isEditing} errors={errors} />
+              {isEditing && (
+                <div className="flex justify-end pt-4">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className={`btn btn-primary px-8 shadow-lg shadow-primary/20`}
+                  >
+                    {isSubmitting ? <span className="loading loading-spinner loading-sm"></span> : 'Save Changes'}
+                  </button>
+                </div>
+              )}
+            </form>
+          </div>
+
+          {/* Password Change Form Added Here! */}
+          <PasswordChangeForm />
+          
         </div>
       </div>
     </div>
