@@ -15,12 +15,6 @@ const ServiceList = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  // const services = [
-  //   { id: 1, name: "Express Home Clean", price: 55, rating: 4.8, category_name: "Residential" },
-  //   { id: 2, name: "Deep Kitchen Sanitize", price: 120, rating: 4.9, category_name: "Deep Clean" },
-  //   { id: 3, name: "Window Polish (per floor)", price: 40, rating: 4.7, category_name: "Residential" },
-  //   { id: 4, name: "Office Desk Disinfection", price: 85, rating: 5.0, category_name: "Commercial" },
-  // ];
   if (error) return <div className="text-error text-center py-10">Failed to load services.</div>;
 
   return (

@@ -4,9 +4,11 @@ import useCategories from '../../hooks/useCategories';
 import useServices from '../../hooks/useServices';
 import FilterSection from './FilterSection';
 import Pagination from './Pagination';
+import { useLocation } from 'react-router';
 
 const ShopPage = () => {
   // 1. All the state required by your hook
+  const location = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [ordering, setOrdering] = useState("");
@@ -24,6 +26,14 @@ const ShopPage = () => {
     priceRange,
     searchQuery
   });
+  
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const categoryId = params.get('category');
+    if (categoryId) {
+      setSelectedCategory(categoryId);
+    }
+  }, [location]);
 
   // 4. IMPORTANT: Reset to page 1 if any filter changes
   useEffect(() => {
@@ -31,18 +41,18 @@ const ShopPage = () => {
     setCurrentPage(1);
   }, [selectedCategory, ordering, priceRange, searchQuery]);
 
-  
+
   return (
     <div className="min-h-screen bg-base-200 py-12 pt-24">
       <div className="container mx-auto px-4">
-        
+
         <div className="mb-8">
           <h1 className="text-4xl font-black italic text-primary uppercase">All Services</h1>
           <p className="text-gray-500 mt-2">Filter and find exactly what you need.</p>
         </div>
 
         {/* Filters */}
-        <FilterSection 
+        <FilterSection
           searchQuery={searchQuery} setSearchQuery={setSearchQuery}
           selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory}
           ordering={ordering} setOrdering={setOrdering}
@@ -58,9 +68,9 @@ const ShopPage = () => {
         )}
         {/* Pagination */}
         <Pagination
-          currentPage={currentPage} 
-          totalPages={totalPages} 
-          onPageChange={setCurrentPage} 
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
         />
 
         {/* Service List / Loading State */}
@@ -71,7 +81,7 @@ const ShopPage = () => {
         ) : services.length === 0 && !errorMsg ? (
           <div className="text-center py-20 bg-base-100 rounded-2xl">
             <h3 className="text-xl font-bold opacity-50">No services found matching your filters.</h3>
-            <button 
+            <button
               className="btn btn-outline btn-sm mt-4"
               onClick={() => {
                 // Quick reset button
@@ -86,14 +96,14 @@ const ShopPage = () => {
           </div>
         ) : (
           // Pass the data to the component you already built!
-          <Services services={services} loading={loading}/> 
+          <Services services={services} loading={loading} />
         )}
 
         {/* Pagination */}
         <Pagination
-          currentPage={currentPage} 
-          totalPages={totalPages} 
-          onPageChange={setCurrentPage} 
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
         />
 
       </div>

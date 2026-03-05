@@ -17,6 +17,9 @@ import BookingDetails from '../components/Bookings/BookingDetails';
 import AdminServiceManager from '../components/dashboard/AdminService';
 import ForgotPassword from '../components/Profile/ForgotPassword';
 import ResetPasswordConfirm from '../components/Profile/ResetPasswordConfirm';
+import MyReviews from '../components/reviews/MyReviews';
+import CustomersPage from '../components/dashboard/CustomersPage';
+import CustomerDetailsPage from '../components/dashboard/CustomerDetailsPage';
 
 const AppRoutes = () => {
   return (
@@ -42,6 +45,9 @@ const AppRoutes = () => {
           <Route path='bookings/:id' element={<BookingDetails />} />
           <Route path='cart' element={<Cart />} />
           <Route path='admin/services' element={<AdminServiceManager />} />
+          <Route path='reviews' element={<MyReviews />} />
+          <Route path='customers' element={<CustomersPage />} />
+          <Route path='customers/details/:id' element={<CustomerDetailsPage />} />
         </Route>
       </Routes>
     </>
