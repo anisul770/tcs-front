@@ -1,17 +1,25 @@
 import React, { useState } from 'react';
+import toast from "react-hot-toast";
 import useCartContext from '../../hooks/useCartContext';
 import { useNavigate } from 'react-router';
+import useAuthContext from "../../hooks/useAuthContext";
 import { Loader2, ShoppingCart, Zap } from 'lucide-react';
 
 const ServicePricingCard = ({ price, service }) => {
 
   const { addCartItems } = useCartContext();
+  const {user} = useAuthContext();
   const navigate = useNavigate();
   const [isAdding, setIsAdding] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
 
   
   const handleAddToCart = async () => {
+    if (!user) {
+      toast.fail("Please login or register");
+      navigate("/login"); 
+      return;
+    };
     setIsAdding(true);
     await addCartItems(service.id, 1);
     setIsAdding(false);
@@ -19,6 +27,11 @@ const ServicePricingCard = ({ price, service }) => {
 
 
   const handleDirectBooking = async () => {
+    if (!user) {
+      toast.fail("Please login or register");
+      navigate("/login"); 
+      return;
+    };
     setIsBooking(true);
     await addCartItems(service.id, 1);
     navigate("/dashboard/cart"); 
