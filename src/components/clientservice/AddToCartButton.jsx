@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import useCartContext from "../../hooks/useCartContext";
 
 const AddToCartButton = ({ serviceId, quantity = 1}) => {
