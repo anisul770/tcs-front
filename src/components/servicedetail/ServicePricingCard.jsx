@@ -17,7 +17,6 @@ const ServicePricingCard = ({ price, service }) => {
   const handleAddToCart = async () => {
   if (!user) {
     toast.error("Please login to book a service");
-    navigate("/login"); 
     return;
   };
 
@@ -37,8 +36,7 @@ const ServicePricingCard = ({ price, service }) => {
 
   const handleDirectBooking = async () => {
     if (!user) {
-    toast.error("Please login to book a service");
-    navigate("/login"); 
+    toast.error("Please login to book a service"); 
     return;
   };
     setIsBooking(true);
