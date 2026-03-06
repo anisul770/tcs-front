@@ -1,8 +1,10 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
+import useAuthContext from "../../hooks/useAuthContext";
 import useCartContext from "../../hooks/useCartContext";
 
 const AddToCartButton = ({ serviceId, quantity = 1}) => {
+  const {user} = useAuthContext();
   const { addCartItems } = useCartContext();
   const [isAdding, setIsAdding] = useState(false);
 
