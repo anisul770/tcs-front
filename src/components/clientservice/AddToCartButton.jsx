@@ -7,6 +7,10 @@ const AddToCartButton = ({ serviceId, quantity = 1}) => {
 
   const handleAddToCart = async () => {
     if (!serviceId) return; // Safety check
+    if (!user) {
+    toast.error("Please login to add a service"); 
+    return;
+  };
     
     setIsAdding(true);
     await addCartItems(serviceId, quantity);
