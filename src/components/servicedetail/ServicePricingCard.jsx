@@ -15,23 +15,32 @@ const ServicePricingCard = ({ price, service }) => {
 
   
   const handleAddToCart = async () => {
-    if (!user) {
-      toast.fail("Please login or register");
-      navigate("/login"); 
-      return;
-    };
+  if (!user) {
+    toast.error("Please login to book a service");
+    navigate("/login"); 
+    return;
+  };
+
+  try {
     setIsAdding(true);
     await addCartItems(service.id, 1);
+    toast.success(`${service.name} added to your booking list!`);
+  } catch (error) {
+    toast.error("Failed to add to cart. Please try again.");
+    console.error(error);
+  } finally {
     setIsAdding(false);
-  };
+  }
+};
+
 
 
   const handleDirectBooking = async () => {
     if (!user) {
-      toast.fail("Please login or register");
-      navigate("/login"); 
-      return;
-    };
+    toast.error("Please login to book a service");
+    navigate("/login"); 
+    return;
+  };
     setIsBooking(true);
     await addCartItems(service.id, 1);
     navigate("/dashboard/cart"); 
