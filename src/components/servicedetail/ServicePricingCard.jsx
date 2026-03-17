@@ -1,24 +1,44 @@
 import React, { useState } from 'react';
+import toast from "react-hot-toast";
 import useCartContext from '../../hooks/useCartContext';
 import { useNavigate } from 'react-router';
+import useAuthContext from "../../hooks/useAuthContext";
 import { Loader2, ShoppingCart, Zap } from 'lucide-react';
 
 const ServicePricingCard = ({ price, service }) => {
 
   const { addCartItems } = useCartContext();
+  const {user} = useAuthContext();
   const navigate = useNavigate();
   const [isAdding, setIsAdding] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
 
   
   const handleAddToCart = async () => {
+  if (!user) {
+    toast.error("Please login to book a service");
+    return;
+  };
+
+  try {
     setIsAdding(true);
     await addCartItems(service.id, 1);
+    toast.success(`${service.name} added to your booking list!`);
+  } catch (error) {
+    toast.error("Failed to add to cart. Please try again.");
+    console.error(error);
+  } finally {
     setIsAdding(false);
-  };
+  }
+};
+
 
 
   const handleDirectBooking = async () => {
+    if (!user) {
+    toast.error("Please login to book a service"); 
+    return;
+  };
     setIsBooking(true);
     await addCartItems(service.id, 1);
     navigate("/dashboard/cart"); 
