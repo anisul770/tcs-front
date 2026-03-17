@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import useAuthContext from "../../hooks/useAuthContext";
 import { Menu, LogOut, User, Settings, Sparkles, ShieldCheck } from "lucide-react";
+import ThemeToggle from "../ThemeToggle";
 
 const DashboardNavbar = () => {
   const { user, logout } = useAuthContext();
@@ -52,6 +53,7 @@ const DashboardNavbar = () => {
 
         {/* Dropdown Menu */}
         <div className="dropdown dropdown-end">
+          <ThemeToggle/>
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar online">
             <div className="w-11 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 overflow-hidden bg-primary flex items-center justify-center text-primary-content transition-transform hover:scale-105 active:scale-95">
               {user?.profile_pic ? (

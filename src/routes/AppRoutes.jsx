@@ -22,6 +22,9 @@ import CustomersPage from '../components/dashboard/CustomersPage';
 import CustomerDetailsPage from '../components/dashboard/CustomerDetailsPage';
 import AllReviews from '../components/reviews/AllReviews';
 import ManageCategories from '../components/dashboard/ManageCategories';
+import About from '../pages/About';
+import ContactPage from '../pages/ContactPage';
+import NotFound from '../pages/NotFound';
 
 const AppRoutes = () => {
   return (
@@ -31,6 +34,8 @@ const AppRoutes = () => {
         <Route element={<MainLayout />}>
           <Route index element={<Home />} />
           <Route path='services' element={<Service />} />
+          <Route path='contact' element={<ContactPage />} />
+          <Route path='about' element={<About />} />
           <Route path='services/:serviceId' element={<ServiceDetail />} />
           <Route path='login' element={<LoginPage />} />
           <Route path='register' element={<RegisterPage />} />
@@ -38,9 +43,7 @@ const AppRoutes = () => {
           <Route path='forgot-password' element={<ForgotPassword />} />
           <Route path='password/reset/confirm/:uid/:token/' element={<ResetPasswordConfirm />} />
         </Route>
-        <Route path='dashboard' element={<PrivateRoute >
-          <DashboardLayout />
-        </PrivateRoute>} >
+        <Route path='dashboard' element={<PrivateRoute ><DashboardLayout /></PrivateRoute>} >
           <Route index element={<Dashboard />} />
           <Route path='profile' element={<ProfileSettings />} />
           <Route path='bookings' element={<BookingsList />} />
@@ -53,6 +56,7 @@ const AppRoutes = () => {
           <Route path='all-reviews' element={<AllReviews />} />
           <Route path='customers/details/:id' element={<CustomerDetailsPage />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );

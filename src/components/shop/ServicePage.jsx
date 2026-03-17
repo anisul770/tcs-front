@@ -6,19 +6,35 @@ import FilterSection from './FilterSection';
 import Pagination from './Pagination';
 import { useLocation } from 'react-router';
 
+// Helper component for the Skeleton Card
+const ServiceSkeleton = () => (
+  <div className="card bg-base-100 shadow-xl border border-base-300 overflow-hidden">
+    <div className="h-48 bg-base-300 animate-pulse"></div> {/* Image placeholder */}
+    <div className="card-body p-6 space-y-4">
+      <div className="h-4 bg-base-300 animate-pulse rounded w-1/2"></div> {/* Category tag */}
+      <div className="h-6 bg-base-300 animate-pulse rounded w-3/4"></div> {/* Title */}
+      <div className="space-y-2">
+        <div className="h-3 bg-base-300 animate-pulse rounded w-full"></div> {/* Description line 1 */}
+        <div className="h-3 bg-base-300 animate-pulse rounded w-5/6"></div> {/* Description line 2 */}
+      </div>
+      <div className="flex justify-between items-center pt-4">
+        <div className="h-8 bg-base-300 animate-pulse rounded w-20"></div> {/* Price tag */}
+        <div className="h-10 bg-base-300 animate-pulse rounded w-28"></div> {/* Button */}
+      </div>
+    </div>
+  </div>
+);
+
 const ShopPage = () => {
-  // 1. All the state required by your hook
   const location = useLocation();
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [ordering, setOrdering] = useState("");
-  const [priceRange, setPriceRange] = useState([0, 500]); // Default min/max
+  const [priceRange, setPriceRange] = useState([0, 500]); 
   const [searchQuery, setSearchQuery] = useState("");
 
-  // 2. Fetch Categories for the dropdown
   const { categories } = useCategories();
 
-  // 3. Fetch Services using your hook
   const { loading, services, errorMsg, totalPages } = useServices({
     currentPage,
     selectedCategory,
@@ -31,16 +47,15 @@ const ShopPage = () => {
     const params = new URLSearchParams(location.search);
     const categoryId = params.get('category');
     if (categoryId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedCategory(categoryId);
     }
   }, [location]);
 
-  // 4. IMPORTANT: Reset to page 1 if any filter changes
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentPage(1);
   }, [selectedCategory, ordering, priceRange, searchQuery]);
-
 
   return (
     <div className="min-h-screen bg-base-200 py-12 pt-24">
@@ -51,7 +66,6 @@ const ShopPage = () => {
           <p className="text-gray-500 mt-2">Filter and find exactly what you need.</p>
         </div>
 
-        {/* Filters */}
         <FilterSection
           searchQuery={searchQuery} setSearchQuery={setSearchQuery}
           selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory}
@@ -60,23 +74,25 @@ const ShopPage = () => {
           categories={categories}
         />
 
-        {/* Error Handling */}
         {errorMsg && (
           <div className="alert alert-error my-4">
             <span>Something went wrong while fetching services.</span>
           </div>
         )}
-        {/* Pagination */}
+
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
           onPageChange={setCurrentPage}
         />
 
-        {/* Service List / Loading State */}
+        {/* Service List / Skeleton Loading State */}
         {loading ? (
-          <div className="flex justify-center py-20">
-            <span className="loading loading-spinner loading-lg text-primary"></span>
+          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+            {/* Display 6 skeletons while loading */}
+            {[...Array(6)].map((_, index) => (
+              <ServiceSkeleton key={index} />
+            ))}
           </div>
         ) : services.length === 0 && !errorMsg ? (
           <div className="text-center py-20 bg-base-100 rounded-2xl">
@@ -84,7 +100,6 @@ const ShopPage = () => {
             <button
               className="btn btn-outline btn-sm mt-4"
               onClick={() => {
-                // Quick reset button
                 setSearchQuery("");
                 setSelectedCategory("");
                 setOrdering("");
@@ -95,11 +110,9 @@ const ShopPage = () => {
             </button>
           </div>
         ) : (
-          // Pass the data to the component you already built!
           <Services services={services} loading={loading} />
         )}
 
-        {/* Pagination */}
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
