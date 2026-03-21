@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { Globe, Code2, Github, Linkedin, Send, Sparkles, ShieldCheck } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { Link } from 'react-router';
 
 const Footer = () => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
@@ -64,9 +65,9 @@ const Footer = () => {
             <h6 className="font-black italic uppercase text-primary tracking-widest text-xs mb-6">Company</h6>
             <nav className="flex flex-col gap-3">
               {["About Us", "Contact", "Reviews", "Terms of Service"].map((item) => (
-                <a key={item} className="link link-hover text-sm font-bold opacity-70 hover:opacity-100 hover:text-primary transition-all">
+                <Link key={item} to={`/${item.toLowerCase().split(' ')[0]}`} className="link link-hover text-sm font-bold opacity-70 hover:opacity-100 hover:text-primary transition-all">
                   {item}
-                </a>
+                </Link>
               ))}
             </nav>
           </div>
