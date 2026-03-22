@@ -2,11 +2,21 @@ import { useForm } from 'react-hook-form';
 import { Globe, Code2, Github, Linkedin, Send, Sparkles, ShieldCheck } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router';
-import useServices from '../hooks/useServices';
+import { useEffect, useState } from 'react';
+import apiClient from '../services/api-client';
 
 const Footer = () => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
-  const { services} = useServices({ currentPage: 1, selectedCategory: "", ordering: "", priceRange: [0, 500], searchQuery: "" });
+  const [services, setServices] = useState([]);
+
+  useEffect(() => {
+    apiClient.get("/services/?ordering=-avg_rating")
+      .then((res) => {
+        // Handle both direct array or paginated .results
+        const data = res.data.results || res.data;
+        setServices(data);
+      })
+  }, []);
 
   const onSubscribe = (data) => {
     console.log("Newsletter Subscription:", data);
@@ -54,7 +64,7 @@ const Footer = () => {
           <div>
             <h6 className="font-black italic uppercase text-primary tracking-widest text-xs mb-6">Services</h6>
             <nav className="flex flex-col gap-3">
-              {services.slice(0,4).map((item) => (
+              {services.slice(0, 4).map((item) => (
                 <Link key={item.id} to={`/services/${item.id}`} className="link link-hover text-sm font-bold opacity-70 hover:opacity-100 hover:text-primary transition-all">
                   {item.name}
                 </Link>
