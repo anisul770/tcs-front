@@ -120,7 +120,11 @@ tcs/
    npm run dev
    ```
 
-
+5. **Build PWA (In Development):**
+   ```bash
+   npm run build
+   npm run preview
+   ```
 ## 🌐 API Integration
 
 The application communicates with a custom REST API backend. Key endpoints include:
