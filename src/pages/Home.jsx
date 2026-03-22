@@ -12,7 +12,7 @@ const Home = () => {
     <>
       <HeroCarousel />
       
-      <div className="flex flex-col gap-20 py-10"> {/* Added spacing for better scroll effect */}
+      <div className="flex flex-col py-10"> {/* Added spacing for better scroll effect */}
         <Reveal>
           <PWASpotlight />
         </Reveal>
