@@ -14,7 +14,7 @@ export default defineConfig({
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
         name: 'TCS Cleaning Services',
-        short_name: 'TCS Bold',
+        short_name: 'TCS',
         description: 'Premium Cleaning Services Booking Platform',
         theme_color: '#ffffff', // Change this to your primary brand color
         icons: [
