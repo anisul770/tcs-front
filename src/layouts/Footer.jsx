@@ -2,9 +2,11 @@ import { useForm } from 'react-hook-form';
 import { Globe, Code2, Github, Linkedin, Send, Sparkles, ShieldCheck } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router';
+import useServices from '../hooks/useServices';
 
 const Footer = () => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const { services} = useServices({ currentPage: 1, selectedCategory: "", ordering: "", priceRange: [0, 500], searchQuery: "" });
 
   const onSubscribe = (data) => {
     console.log("Newsletter Subscription:", data);
@@ -52,10 +54,10 @@ const Footer = () => {
           <div>
             <h6 className="font-black italic uppercase text-primary tracking-widest text-xs mb-6">Services</h6>
             <nav className="flex flex-col gap-3">
-              {["Residential Cleaning", "Office Cleaning", "Deep Cleaning", "Window Washing"].map((item) => (
-                <a key={item} className="link link-hover text-sm font-bold opacity-70 hover:opacity-100 hover:text-primary transition-all">
-                  {item}
-                </a>
+              {services.slice(0,4).map((item) => (
+                <Link key={item.id} to={`/services/${item.id}`} className="link link-hover text-sm font-bold opacity-70 hover:opacity-100 hover:text-primary transition-all">
+                  {item.name}
+                </Link>
               ))}
             </nav>
           </div>
