@@ -23,6 +23,7 @@ A modern, full-featured service booking web application built with React and a c
 
 ### Technical Features
 - **Responsive Design**: Mobile-friendly interface
+- **Progressive Web App (PWA)**: Offline support, installable app behavior, and auto-update through service worker
 - **Real-time Notifications**: Toast notifications for user feedback
 - **Form Validation**: Client-side validation with React Hook Form
 - **Smooth Animations**: Framer Motion animations for enhanced UX
