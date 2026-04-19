@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import useAuthContext from "../../hooks/useAuthContext";
 import useBookingContext from "../../hooks/useBookingContext";
 import {
-  LayoutDashboard, TrendingUp, Clock, CheckCircle,
+  LayoutDashboard, TrendingUp, Clock, CheckCircle,ArrowDownRight,
   ArrowUpRight, AlertCircle, FileText, Settings, Activity
 } from "lucide-react";
 
