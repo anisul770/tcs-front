@@ -285,7 +285,7 @@ const AdminServiceManager = () => {
           </form>
         </div>
       </dialog>
-      <div className="flex justify-center mt-2"><button onClick={() => fetchData()} className="btn btn-primary rounded-2xl px-8 shadow-xl shadow-primary/20 font-black italic uppercase tracking-widest text-xs group" >
+      <div className="flex justify-center mt-2"><button onClick={() => fetchData()} disabled={newLoading || !page} className="btn btn-primary rounded-2xl px-8 shadow-xl shadow-primary/20 font-black italic uppercase tracking-widest text-xs group" >
         { newLoading ? <Loader2 className="animate-spin text-white" size={18} />:<MoveDown size={18} className="group-hover:rotate-360 transition-transform" />} Load More ... 
       </button></div>
     </div>
