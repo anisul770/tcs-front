@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Plus, Edit2, Trash2, Loader2, CheckCircle, XCircle, ChevronDown, AlertCircle } from "lucide-react";
+import { Plus, Edit2, Trash2, Loader2, CheckCircle, XCircle, ChevronDown, AlertCircle, MoveDown } from "lucide-react";
 import toast from "react-hot-toast";
 import authApiClient from "../../services/auth-api-client";
 import apiClient from "../../services/api-client";
@@ -12,24 +12,37 @@ const AdminServiceManager = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
+  const [page, setPage] = useState(1);
   const [actionLoading, setActionLoading] = useState(false);
+  const [newLoading, setNewLoading] = useState(false);
 
   // Initializing React Hook Form
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
   const fetchData = async () => {
-    setLoading(true);
+    if (page === 0) setLoading(true)
+    else setNewLoading(true);
     try {
       const [serviceRes, catRes] = await Promise.all([
-        apiClient.get("/services/"),
+        apiClient.get(`/services/?page=${page}`),
         apiClient.get("/categories/")
       ]);
-      setServices(serviceRes.data.results || []);
+      console.log(services);
+      const nextUrl = serviceRes.data.next;
+      if (nextUrl) {
+        const urlObj = new URL(nextUrl);
+        const pageNumber = urlObj.searchParams.get("page");
+        setPage(pageNumber);
+      } else {
+        setPage(null);
+      } 
+      setServices([...services, ...(serviceRes.data.results || [])]);
       setCategories(catRes.data.results || catRes.data || []);
     } catch (err) {
       toast.error(err.response?.data?.detail || "Database synchronization failed.");
     } finally {
       setLoading(false);
+      setNewLoading(false);
     }
   };
 
@@ -272,6 +285,9 @@ const AdminServiceManager = () => {
           </form>
         </div>
       </dialog>
+      <div className="flex justify-center mt-2"><button onClick={() => fetchData()} className="btn btn-primary rounded-2xl px-8 shadow-xl shadow-primary/20 font-black italic uppercase tracking-widest text-xs group" >
+        { newLoading ? <Loader2 className="animate-spin text-white" size={18} />:<MoveDown size={18} className="group-hover:rotate-360 transition-transform" />} Load More ... 
+      </button></div>
     </div>
   );
 };
